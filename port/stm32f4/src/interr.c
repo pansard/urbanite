@@ -5,10 +5,14 @@
  * @date 2025-01-01
  */
 // Include HW dependencies:
-#include "port_system.h"
 #include "stm32f4_system.h"
+#include "stm32f4_button.h"
+#include "stm32f4_ultrasound.h"
 
 // Include headers of different port elements:
+#include "port_system.h"
+#include "port_button.h"
+#include "port_ultrasound.h"
 
 //------------------------------------------------------
 // INTERRUPT SERVICE ROUTINES
@@ -28,4 +32,33 @@
  */
 void SysTick_Handler(void)
 {
+    uint32_t milli;
+
+    milli = port_system_get_millis();
+    port_system_set_millis(milli + 1);
+}
+
+void EXTI15_10_IRQHandler(void)
+{
+    // ISR parking button
+    if (port_button_get_pending_interrupt(PORT_PARKING_BUTTON_ID))
+    {
+        bool gpio_user = port_button_get_value(PORT_PARKING_BUTTON_ID);
+        if (gpio_user)
+        {
+            port_button_set_pressed(PORT_PARKING_BUTTON_ID, false); // no presionado
+        }
+        else
+        {
+            port_button_set_pressed(PORT_PARKING_BUTTON_ID, true); // presionado
+        }
+        port_button_clear_pending_interrupt(PORT_PARKING_BUTTON_ID);
+    }
+    EXTI->PR |= BIT_POS_TO_MASK(PORT_PARKING_BUTTON_ID); // DOCMUENTAR DOXYGEN
+}
+
+void TIM3_IRQHandler(void)
+{
+    TIM3->SR &= ~TIM_SR_UIF; // DOCUMENTAR DOXYGEN
+    port_ultrasound_set_trigger_end(PORT_REAR_PARKING_SENSOR_ID, true);
 }

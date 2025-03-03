@@ -180,12 +180,12 @@ void port_system_delay_until_ms(uint32_t *p_t, uint32_t ms)
 
 uint32_t port_system_get_millis()
 {
-  return 0;
+  return msTicks;
 }
 
 void port_system_set_millis(uint32_t ms)
 {
-
+  msTicks = ms;
 }
 
 // ------------------------------------------------------
@@ -299,3 +299,28 @@ void stm32f4_system_gpio_config_alternate(GPIO_TypeDef *p_port, uint8_t pin, uin
 // ------------------------------------------------------
 // POWER RELATED FUNCTIONS
 // ------------------------------------------------------
+
+bool stm32f4_system_gpio_read(GPIO_TypeDef * p_port, uint8_t pin){
+  return (p_port->IDR & BIT_POS_TO_MASK(pin)) != 0;
+
+  /** forma de lucía */
+} //DOCUMENTAR DOXYGEN
+
+void stm32f4_system_gpio_toggle(GPIO_TypeDef * p_port, uint8_t pin) {
+  bool value = stm32f4_system_gpio_read(p_port, pin);
+
+  if (value) {
+    stm32f4_system_gpio_write(p_port, pin, false);
+  } else {
+    stm32f4_system_gpio_write(p_port, pin, true);
+  }
+  //stm32f4_system_gpio_write(p_port, pin, !stm32f4_system_gpio_read(p_port, pin));
+} //DOCUMENTAR DOXYGEN
+
+void 	stm32f4_system_gpio_write(GPIO_TypeDef *p_port, uint8_t pin, bool value) {
+  if (value) {
+    p_port->BSRR |= BIT_POS_TO_MASK(pin);
+  } else {
+    p_port->BSRR |= BIT_POS_TO_MASK(pin) << 0x10;
+  }
+} //DOCUMENTAR DOXYGEN
