@@ -1,8 +1,8 @@
 /**
  * @file port_button.h
  * @brief Header for the portable functions to interact with the HW of the buttons. The functions must be implemented in the platform-specific code.
- * @author alumno1
- * @author alumno2
+ * @author Lucia Petit
+ * @author Mateo Pansard
  * @date fecha
  */
 
@@ -16,8 +16,8 @@
 
 /* Defines and enums ----------------------------------------------------------*/
 /* Defines */
-#define PORT_PARKING_BUTTON_ID 0
-#define PORT_PARKING_BUTTON_DEBOUNCE_TIME_MS 150
+#define PORT_PARKING_BUTTON_ID 0 /*!< ID of the parking button */
+#define PORT_PARKING_BUTTON_DEBOUNCE_TIME_MS 150 /*!< User button identifier that represents the rear button */
 
 /* Function prototypes and explanation -------------------------------------------------*/
 

@@ -304,7 +304,7 @@ bool stm32f4_system_gpio_read(GPIO_TypeDef * p_port, uint8_t pin){
   return (p_port->IDR & BIT_POS_TO_MASK(pin)) != 0;
 
   /** forma de lucía */
-} //DOCUMENTAR DOXYGEN
+} 
 
 void stm32f4_system_gpio_toggle(GPIO_TypeDef * p_port, uint8_t pin) {
   bool value = stm32f4_system_gpio_read(p_port, pin);
@@ -315,7 +315,7 @@ void stm32f4_system_gpio_toggle(GPIO_TypeDef * p_port, uint8_t pin) {
     stm32f4_system_gpio_write(p_port, pin, true);
   }
   //stm32f4_system_gpio_write(p_port, pin, !stm32f4_system_gpio_read(p_port, pin));
-} //DOCUMENTAR DOXYGEN
+} 
 
 void 	stm32f4_system_gpio_write(GPIO_TypeDef *p_port, uint8_t pin, bool value) {
   if (value) {
@@ -323,4 +323,4 @@ void 	stm32f4_system_gpio_write(GPIO_TypeDef *p_port, uint8_t pin, bool value) {
   } else {
     p_port->BSRR |= BIT_POS_TO_MASK(pin) << 0x10;
   }
-} //DOCUMENTAR DOXYGEN
+} 
