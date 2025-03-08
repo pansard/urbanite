@@ -38,6 +38,12 @@ void SysTick_Handler(void)
     port_system_set_millis(milli + 1);
 }
 
+/**
+ * @brief This function handles Px10-Px15 global interrupts.
+ * 
+ First, this function identifies the line/ pin which has raised the interruption. Then, perform the desired action. Before leaving it cleans the interrupt pending register.
+ * 
+ */
 void EXTI15_10_IRQHandler(void)
 {
     // ISR parking button
@@ -54,11 +60,17 @@ void EXTI15_10_IRQHandler(void)
         }
         port_button_clear_pending_interrupt(PORT_PARKING_BUTTON_ID);
     }
-    EXTI->PR |= BIT_POS_TO_MASK(PORT_PARKING_BUTTON_ID); // DOCMUENTAR DOXYGEN
+    EXTI->PR |= BIT_POS_TO_MASK(PORT_PARKING_BUTTON_ID); 
 }
 
+/**
+ * @brief Interrupt service routine for the TIM3 timer.
+
+This timer controls the duration of the trigger signal of the ultrasound sensor. When the interrupt occurs it means that the time of the trigger signal has expired and must be lowered.
+ * 
+ */
 void TIM3_IRQHandler(void)
 {
-    TIM3->SR &= ~TIM_SR_UIF; // DOCUMENTAR DOXYGEN
+    TIM3->SR &= ~TIM_SR_UIF; 
     port_ultrasound_set_trigger_end(PORT_REAR_PARKING_SENSOR_ID, true);
 }
