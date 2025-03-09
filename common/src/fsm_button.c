@@ -1,9 +1,9 @@
 /**
  * @file fsm_button.c
  * @brief Button FSM main file.
- * @author alumno1
- * @author alumno2
- * @date fecha
+ * @author Mateo Pansard
+ * @author Lucia Petit
+ * @date 2025-03-9
  */
 
 /* Includes ------------------------------------------------------------------*/
@@ -26,22 +26,50 @@ struct fsm_button_t {
 };
 
 /* State machine input or transition functions */
+
+/**
+ * @brief Checks wether the button has been pressed or not.
+ * 
+ * @param p_this 
+ * @return true 
+ * @return false 
+ */
 static bool check_button_pressed(fsm_t * p_this)
 {
     return port_button_get_pressed(((fsm_button_t *)p_this)->button_id);
 }
 
+/**
+ * @brief Checks if the button has been released or not.
+ * 
+ * @param p_this 
+ * @return true 
+ * @return false 
+ */
 static bool check_button_released(fsm_t * p_this)
 {
     return !port_button_get_pressed(((fsm_button_t *)p_this)->button_id);
 }
 
+/**
+ * @brief Checks if the debounce time has been reached.
+ * 
+ * @param p_this 
+ * @return true 
+ * @return false 
+ */
 static bool check_timeout(fsm_t * p_this)
 {
     return port_system_get_millis() >= ((fsm_button_t *)p_this)->next_timeout;
 }
 
 /* State machine output or action functions */
+
+/**
+ * @brief Stores the tick when the button was pressed.
+ * 
+ * @param p_this 
+ */
 static void do_store_tick_pressed(fsm_t * p_this)
 {
     fsm_button_t * estado = ((fsm_button_t *)p_this);
@@ -49,6 +77,11 @@ static void do_store_tick_pressed(fsm_t * p_this)
     estado -> next_timeout = port_system_get_millis() + estado->debounce_time_ms;
 }
 
+/**
+ * @brief Stores the duration of the button press.
+ * 
+ * @param p_this 
+ */
 static void do_set_duration(fsm_t * p_this)
 {
     fsm_button_t * estado = ((fsm_button_t *)p_this);
@@ -56,6 +89,10 @@ static void do_set_duration(fsm_t * p_this)
     estado->next_timeout = port_system_get_millis() + estado->debounce_time_ms;
 }
 
+/**
+ * @brief Array of transitions for the button FSM.
+ * 
+ */
 static fsm_trans_t fsm_trans_button[] = {
     { BUTTON_RELEASED, check_button_pressed, BUTTON_PRESSED_WAIT, do_store_tick_pressed },
     { BUTTON_PRESSED_WAIT, check_timeout, BUTTON_PRESSED, NULL},
@@ -80,6 +117,13 @@ uint32_t fsm_button_get_debounce_time_ms(fsm_button_t *p_fsm)
     return p_fsm->debounce_time_ms;
 }
 
+/**
+ * @brief Initializes the button FSM.
+ * 
+ * @param p_fsm_button 
+ * @param debounce_time 
+ * @param button_id 
+ */
 static void fsm_button_init(fsm_button_t *p_fsm_button, uint32_t debounce_time, uint32_t button_id)
 {
     fsm_init(&p_fsm_button->f, fsm_trans_button);

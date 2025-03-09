@@ -21,8 +21,6 @@
 
 /* Function prototypes and explanation -------------------------------------------------*/
 
-//DOCUMENTAR TODO DOXYGEN
-
 /**
  * @brief Configure the HW specifications of a given button.
  * 

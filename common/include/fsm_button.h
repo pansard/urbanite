@@ -3,7 +3,7 @@
  * @brief Header for fsm_button.c file.
  * @author Mateo Pansard
  * @author Lucia Petit
- * @date fecha
+ * @date 2025-03-9
  */
 
 #ifndef FSM_BUTTON_H_
@@ -17,10 +17,15 @@
 /* Other includes */
 #include "fsm.h"
 
-
 /* Defines and enums ----------------------------------------------------------*/
 /* Enums */
-enum FSM_BUTTON {
+
+/**
+ * @brief Enum for the states of the button FSM.
+ * 
+ */
+enum FSM_BUTTON
+{
     BUTTON_RELEASED = 0,
     BUTTON_RELEASED_WAIT,
     BUTTON_PRESSED,
@@ -28,24 +33,83 @@ enum FSM_BUTTON {
 };
 
 /* Typedefs --------------------------------------------------------------------*/
+/**
+ * @brief Structure of the button FSM.
+ * 
+ */
 typedef struct fsm_button_t fsm_button_t;
 
 /* Function prototypes and explanation -------------------------------------------------*/
-fsm_button_t * 	fsm_button_new (uint32_t debounce_time_ms, uint32_t button_id);
 
-void fsm_button_destroy (fsm_button_t *p_fsm);
+/**
+ * @brief Create a new button FSM.
+ * 
+ * @param debounce_time_ms
+ * @param button_id
+ * @return fsm_button_t* 
+ */
+fsm_button_t *fsm_button_new(uint32_t debounce_time_ms, uint32_t button_id);
 
-void fsm_button_fire (fsm_button_t *p_fsm);
+/**
+ * @brief Delete a button FSM.
+ * 
+ * @param p_fsm 
+ */
+void fsm_button_destroy(fsm_button_t *p_fsm);
 
-fsm_t * fsm_button_get_inner_fsm (fsm_button_t *p_fsm);
+/**
+ * @brief Fire the button FSM.
+ * 
+ * @param p_fsm 
+ */
+void fsm_button_fire(fsm_button_t *p_fsm);
 
-uint32_t fsm_button_get_state (fsm_button_t *p_fsm);
+/**
+ * @brief Get the FSM of the button.
+ * 
+ * @param p_fsm 
+ * @return fsm_t* 
+ */
+fsm_t *fsm_button_get_inner_fsm(fsm_button_t *p_fsm);
 
-uint32_t fsm_button_get_duration (fsm_button_t *p_fsm);
+/**
+ * @brief Get the state of the button FSM.
+ * 
+ * @param p_fsm 
+ * @return uint32_t 
+ */
+uint32_t fsm_button_get_state(fsm_button_t *p_fsm);
 
-void fsm_button_reset_duration (fsm_button_t *p_fsm);
+/**
+ * @brief Get the duration of the latest button press.
+ * 
+ * @param p_fsm 
+ * @return uint32_t 
+ */
+uint32_t fsm_button_get_duration(fsm_button_t *p_fsm);
 
-uint32_t fsm_button_get_debounce_time_ms (fsm_button_t *p_fsm);
+/**
+ * @brief Reset the duration of the latest button press.
+ * 
+ * @param p_fsm 
+ */
+void fsm_button_reset_duration(fsm_button_t *p_fsm);
 
-bool fsm_button_check_activity (fsm_button_t *p_fsm);
+/**
+ * @brief Get the debounce time of the button.
+ * 
+ * @param p_fsm 
+ * @return uint32_t 
+ */
+uint32_t fsm_button_get_debounce_time_ms(fsm_button_t *p_fsm);
+
+/**
+ * @brief Check wether the button FSM is active or not.
+ * 
+ * @param p_fsm 
+ * @return true
+ * @return false
+ */
+bool fsm_button_check_activity(fsm_button_t *p_fsm);
+
 #endif
