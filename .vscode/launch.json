@@ -139,6 +139,8 @@
           "test_port_display",
           "test_fsm_display",
           "example_v3",
+          "test_port_ultrasound_timer_echo",
+          "test_port_ultrasound_timer_measurements",
         ]
       }
 		}

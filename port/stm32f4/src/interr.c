@@ -40,9 +40,9 @@ void SysTick_Handler(void)
 
 /**
  * @brief This function handles Px10-Px15 global interrupts.
- * 
+ *
  First, this function identifies the line/ pin which has raised the interruption. Then, perform the desired action. Before leaving it cleans the interrupt pending register.
- * 
+ *
  */
 void EXTI15_10_IRQHandler(void)
 {
@@ -60,17 +60,56 @@ void EXTI15_10_IRQHandler(void)
         }
         port_button_clear_pending_interrupt(PORT_PARKING_BUTTON_ID);
     }
-    EXTI->PR |= BIT_POS_TO_MASK(PORT_PARKING_BUTTON_ID); 
+    EXTI->PR |= BIT_POS_TO_MASK(PORT_PARKING_BUTTON_ID);
 }
 
 /**
  * @brief Interrupt service routine for the TIM3 timer.
 
 This timer controls the duration of the trigger signal of the ultrasound sensor. When the interrupt occurs it means that the time of the trigger signal has expired and must be lowered.
- * 
+ *
  */
 void TIM3_IRQHandler(void)
 {
-    TIM3->SR &= ~TIM_SR_UIF; 
+    TIM3->SR &= ~TIM_SR_UIF;
     port_ultrasound_set_trigger_end(PORT_REAR_PARKING_SENSOR_ID, true);
+}
+
+/**
+ * @brief Interrupt service routine for the TIM2 timer. 
+
+This timer controls the duration of the echo signal of the ultrasound sensor by means of the input capture mode.
+ * 
+ */
+void TIM2_IRQHandler(void)
+{
+    uint32_t overflows = port_ultrasound_get_echo_overflows(PORT_REAR_PARKING_SENSOR_ID);
+    uint32_t echo_init_tick = port_ultrasound_get_echo_init_tick(PORT_REAR_PARKING_SENSOR_ID);
+    uint32_t echo_end_tick = port_ultrasound_get_echo_end_tick(PORT_REAR_PARKING_SENSOR_ID);
+
+    if (TIM2->SR & TIM_SR_UIF)
+    {
+        TIM2->SR &= ~TIM_SR_UIF;
+        overflows++;
+        port_ultrasound_set_echo_overflows(PORT_REAR_PARKING_SENSOR_ID, overflows);
+    }
+
+    if ((TIM2->SR & TIM_SR_CC2IF) != 0)
+    {
+        if (echo_init_tick == 0 && echo_end_tick == 0)
+        {
+            port_ultrasound_set_echo_init_tick(PORT_REAR_PARKING_SENSOR_ID, TIM2->CCR2);
+        }
+        else
+        {
+            port_ultrasound_set_echo_end_tick(PORT_REAR_PARKING_SENSOR_ID, TIM2->CCR2);
+            port_ultrasound_set_echo_received(PORT_REAR_PARKING_SENSOR_ID, true);
+        }
+    }
+}
+
+void TIM5_IRQHandler(void)
+{
+    TIM5->SR &= ~TIM_SR_UIF;
+    port_ultrasound_set_trigger_ready(PORT_REAR_PARKING_SENSOR_ID, true);
 }
