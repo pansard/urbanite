@@ -54,16 +54,6 @@ stm32f4_ultrasound_hw_t *_stm32f4_ultrasound_get(uint32_t ultrasound_id)
     {
         return NULL;
     }
-
-    /*
-    if (button_id < sizeof(buttons_arr) / sizeof(buttons_arr[0]))
-    {
-        return &buttons_arr[button_id];
-    }
-    else
-    {
-        return NULL;
-    }*/
 }
 
 static void _timer_trigger_setup()
@@ -181,11 +171,20 @@ void port_ultrasound_stop_trigger_timer(uint32_t ultrasound_id)
     stm32f4_ultrasound_hw_t *p_ultrasound = _stm32f4_ultrasound_get(ultrasound_id);
     stm32f4_system_gpio_write(p_ultrasound->p_trigger_port, p_ultrasound->trigger_pin, 0);
     TIM3->CR1 &= ~TIM_CR1_CEN;
+    TIM3->SR = ~TIM_SR_UIF; // clear update interrupt flag
+    NVIC_DisableIRQ(TIM3_IRQn); // disable timer
 }
 
 void port_ultrasound_stop_echo_timer(uint32_t ultrasound_id)
 {
-    TIM2->CR1 &= ~TIM_CR1_CEN; // disable timer
+    if (ultrasound_id == PORT_REAR_PARKING_SENSOR_ID) //revisar condición
+    {
+        TIM2->CR1 &= ~TIM_CR1_CEN; // disable timer
+    }
+    //nuestro
+    TIM2->SR = ~TIM_SR_UIF;    // clear update interrupt flag
+    TIM2->SR = ~TIM_SR_CC2IF;  // clear capture/compare interrupt flag
+    NVIC_DisableIRQ(TIM2_IRQn);
 }
 
 void port_ultrasound_reset_echo_ticks(uint32_t ultrasound_id)
@@ -320,10 +319,17 @@ void port_ultrasound_start_new_measurement_timer()
 void port_ultrasound_stop_new_measurement_timer()
 {
     TIM5->CR1 &= ~TIM_CR1_CEN;
+    TIM5->SR = ~TIM_SR_UIF; // clear update interrupt flag
+    NVIC_DisableIRQ(TIM5_IRQn); // disable timer
 }
 
 void port_ultrasound_stop_ultrasound(uint32_t ultrasound_id)
 {
+    // ni idea hulio
+    NVIC_DisableIRQ(TIM5_IRQn);
+    NVIC_DisableIRQ(TIM2_IRQn);
+    NVIC_DisableIRQ(TIM3_IRQn);
+    
     port_ultrasound_stop_trigger_timer(ultrasound_id);
     port_ultrasound_stop_echo_timer(ultrasound_id);
     port_ultrasound_stop_new_measurement_timer();

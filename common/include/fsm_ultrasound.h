@@ -14,6 +14,9 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+/* Other includes */
+#include "fsm.h"
+
 /* Defines and enums ----------------------------------------------------------*/
 #define FSM_ULTRASOUND_NUM_MEASUREMENTS 5
 
