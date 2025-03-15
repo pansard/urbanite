@@ -21,15 +21,24 @@
 /* Enums */
 
 /**
- * @brief Enum for the states of the button FSM.
- * 
- */
+ * @brief Enumerator for the button finite state machine.
+
+This enumerator defines the different states that the button finite state machine can be in. Each state represents a specific condition or step in the button press process.
+ 
+| Enumerator| |
+| --------- | --------- | 
+| @ref BUTTON_RELEASED | Starting state. Also comes here when the button has been released  |
+| @ref BUTTON_RELEASED_WAIT | State to perform the anti-debounce mechanism for a falling edge  |
+| @ref BUTTON_PRESSED | State while the button is being pressed  |
+| @ref BUTTON_PRESSED_WAIT | State to perform the anti-debounce mechanism for a rising edge  |
+
+*/
 enum FSM_BUTTON
 {
-    BUTTON_RELEASED = 0,
-    BUTTON_RELEASED_WAIT,
-    BUTTON_PRESSED,
-    BUTTON_PRESSED_WAIT
+    BUTTON_RELEASED = 0,  /**< @brief Starting state. Also comes here when the button has been released. */
+    BUTTON_RELEASED_WAIT,      /**< @brief State to perform the anti-debounce mechanism for a falling edge. */
+    BUTTON_PRESSED,            /**< @brief State while the button is being pressed. */
+    BUTTON_PRESSED_WAIT        /**< @brief State to perform the anti-debounce mechanism for a rising edge. */
 };
 
 /* Typedefs --------------------------------------------------------------------*/

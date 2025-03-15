@@ -15,6 +15,8 @@
 
 /* Project includes */
 #include "fsm_button.h"
+#include "fsm.h"
+
 
 struct fsm_button_t {
     fsm_t f; /* Base struct for FSMs */
@@ -92,6 +94,7 @@ static void do_set_duration(fsm_t * p_this)
 /**
  * @brief Array of transitions for the button FSM.
  * 
+ * @image html docs/assets/imgs/fsm_button.png "Texto alternativo"
  */
 static fsm_trans_t fsm_trans_button[] = {
     { BUTTON_RELEASED, check_button_pressed, BUTTON_PRESSED_WAIT, do_store_tick_pressed },
