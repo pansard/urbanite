@@ -98,24 +98,31 @@ static void do_start_new_measurement(fsm_t *p_this)
 static void do_stop_trigger(fsm_t *p_this)
 {
     port_ultrasound_stop_trigger_timer(((fsm_ultrasound_t *)p_this)->ultrasound_id);
-    port_ultrasound_set_trigger_end(((fsm_ultrasound_t *)p_this)->ultrasound_id, true);
+    port_ultrasound_set_trigger_end(((fsm_ultrasound_t *)p_this)->ultrasound_id, false);
 }
 
 static void do_set_distance(fsm_t *p_this)
 {
+    // port_ultrasound_reset_echo_ticks(((fsm_ultrasound_t *)p_this)->ultrasound_id); // echo signal cleared
     uint32_t init = port_ultrasound_get_echo_init_tick(((fsm_ultrasound_t *)p_this)->ultrasound_id);
     uint32_t echo_end = port_ultrasound_get_echo_end_tick(((fsm_ultrasound_t *)p_this)->ultrasound_id);
     uint32_t overflows = port_ultrasound_get_echo_overflows(((fsm_ultrasound_t *)p_this)->ultrasound_id);
 
     uint32_t t = overflows * 0xFFFFFFFF + echo_end - init;
-    uint32_t distance = t * SPEED_OF_SOUND_MS / 2 / 1000;
+    uint32_t distance = t * SPEED_OF_SOUND_MS / 2 / 10000;
 
-    ((fsm_ultrasound_t *)p_this)->distance_arr[((fsm_ultrasound_t *)p_this)->distance_idx] = distance; // revisar
-    if (((fsm_ultrasound_t *)p_this)->distance_arr[FSM_ULTRASOUND_NUM_MEASUREMENTS] != 0)
+    ((fsm_ultrasound_t *)p_this)->distance_arr[((fsm_ultrasound_t *)p_this)->distance_idx] = distance;
+    if (((fsm_ultrasound_t *)p_this)->distance_idx >= FSM_ULTRASOUND_NUM_MEASUREMENTS - 1)
     {
         qsort(((fsm_ultrasound_t *)p_this)->distance_arr, FSM_ULTRASOUND_NUM_MEASUREMENTS, sizeof(uint32_t), _compare);
-
-        ((fsm_ultrasound_t *)p_this)->distance_cm = ((fsm_ultrasound_t *)p_this)->distance_arr[3];
+        if (FSM_ULTRASOUND_NUM_MEASUREMENTS % 2 == 0)
+        {
+            ((fsm_ultrasound_t *)p_this)->distance_cm = (((fsm_ultrasound_t *)p_this)->distance_arr[FSM_ULTRASOUND_NUM_MEASUREMENTS / 2 - 1] + ((fsm_ultrasound_t *)p_this)->distance_arr[FSM_ULTRASOUND_NUM_MEASUREMENTS / 2]) / 2;
+        }
+        else
+        {
+            ((fsm_ultrasound_t *)p_this)->distance_cm = ((fsm_ultrasound_t *)p_this)->distance_arr[FSM_ULTRASOUND_NUM_MEASUREMENTS / 2 - 1];
+        }
         ((fsm_ultrasound_t *)p_this)->new_measurement = true;
     }
     // NO SABEMOS SI VA DENTRO DEL IF
@@ -151,6 +158,7 @@ void fsm_ultrasound_init(fsm_ultrasound_t *p_fsm_ultrasound, uint32_t ultrasound
     p_fsm_ultrasound->status = false;
     p_fsm_ultrasound->new_measurement = false;
     p_fsm_ultrasound->distance_idx = 0;
+    p_fsm_ultrasound->ultrasound_id = ultrasound_id; // ESTO ARREGLA COSAS
     // memset(p_fsm_ultrasound->distance_arr, 0, sizeof(uint32_t) * FSM_ULTRASOUND_NUM_MEASUREMENTS);
     for (int i = 0; i < FSM_ULTRASOUND_NUM_MEASUREMENTS; i++)
     {
@@ -160,7 +168,7 @@ void fsm_ultrasound_init(fsm_ultrasound_t *p_fsm_ultrasound, uint32_t ultrasound
 }
 
 /* Public functions -----------------------------------------------------------*/
-fsm_ultrasound_t * fsm_ultrasound_new(uint32_t ultrasound_id)
+fsm_ultrasound_t *fsm_ultrasound_new(uint32_t ultrasound_id)
 {
     fsm_ultrasound_t *p_fsm_ultrasound = malloc(sizeof(fsm_ultrasound_t)); /* Do malloc to reserve memory of all other FSM elements, although it is interpreted as fsm_t (the first element of the structure) */
     fsm_ultrasound_init(p_fsm_ultrasound, ultrasound_id);                  /* Initialize the FSM */
@@ -183,7 +191,7 @@ void fsm_ultrasound_destroy(fsm_ultrasound_t *p_fsm)
     free(&p_fsm->f);
 }
 
-fsm_t * fsm_ultrasound_get_inner_fsm(fsm_ultrasound_t *p_fsm)
+fsm_t *fsm_ultrasound_get_inner_fsm(fsm_ultrasound_t *p_fsm)
 {
     return &p_fsm->f;
 }

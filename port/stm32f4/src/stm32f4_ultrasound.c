@@ -107,7 +107,7 @@ static void _timer_echo_setup()
     NVIC_SetPriority(TIM2_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(), 3, 0)); // prioridad 3
 }
 
-static void _timer_new_measurement_setup() //SI ALGO SALE MAL REVISAR
+static void _timer_new_measurement_setup() // SI ALGO SALE MAL REVISAR
 {
     RCC->APB1ENR |= RCC_APB1ENR_TIM5EN;
     TIM5->CR1 &= ~TIM_CR1_CEN;
@@ -171,20 +171,20 @@ void port_ultrasound_stop_trigger_timer(uint32_t ultrasound_id)
     stm32f4_ultrasound_hw_t *p_ultrasound = _stm32f4_ultrasound_get(ultrasound_id);
     stm32f4_system_gpio_write(p_ultrasound->p_trigger_port, p_ultrasound->trigger_pin, 0);
     TIM3->CR1 &= ~TIM_CR1_CEN;
-    TIM3->SR = ~TIM_SR_UIF; // clear update interrupt flag
-    NVIC_DisableIRQ(TIM3_IRQn); // disable timer
+    // TIM3->SR = ~TIM_SR_UIF; // clear update interrupt flag
+    // NVIC_DisableIRQ(TIM3_IRQn); // disable timer
 }
 
 void port_ultrasound_stop_echo_timer(uint32_t ultrasound_id)
 {
-    if (ultrasound_id == PORT_REAR_PARKING_SENSOR_ID) //revisar condición
+    if (ultrasound_id == PORT_REAR_PARKING_SENSOR_ID) // revisar condición
     {
         TIM2->CR1 &= ~TIM_CR1_CEN; // disable timer
     }
-    //nuestro
-    TIM2->SR = ~TIM_SR_UIF;    // clear update interrupt flag
-    TIM2->SR = ~TIM_SR_CC2IF;  // clear capture/compare interrupt flag
-    NVIC_DisableIRQ(TIM2_IRQn);
+    // nuestro
+    // TIM2->SR = ~TIM_SR_UIF;    // clear update interrupt flag
+    // TIM2->SR = ~TIM_SR_CC2IF;  // clear capture/compare interrupt flag
+    NVIC_DisableIRQ(TIM2_IRQn); // disable timer
 }
 
 void port_ultrasound_reset_echo_ticks(uint32_t ultrasound_id)
@@ -287,26 +287,28 @@ void stm32f4_ultrasound_set_new_echo_gpio(uint32_t ultrasound_id, GPIO_TypeDef *
 void port_ultrasound_start_measurement(uint32_t ultrasound_id)
 {
     stm32f4_ultrasound_hw_t *p_ultrasound = _stm32f4_ultrasound_get(ultrasound_id);
-    p_ultrasound->trigger_ready = true;//SI ALGO FALLA CAMBIAR
-    
+    p_ultrasound->trigger_ready = true; // SI ALGO FALLA CAMBIAR
+
     TIM5->CNT = 0;
 
-    if (p_ultrasound->trigger_ready) {
+    if (p_ultrasound->trigger_ready)
+    {
         TIM3->CNT = 0;
         TIM3->CR1 |= TIM_CR1_CEN;
     }
 
-    if (!p_ultrasound->echo_received) {
+    if (!p_ultrasound->echo_received)
+    {
         TIM2->CNT = 0;
         TIM2->CR1 |= TIM_CR1_CEN;
     }
-    
+
     stm32f4_system_gpio_write(p_ultrasound->p_trigger_port, p_ultrasound->trigger_pin, 1);
-    
+
     NVIC_EnableIRQ(TIM3_IRQn);
     NVIC_EnableIRQ(TIM2_IRQn);
     NVIC_EnableIRQ(TIM5_IRQn);
-    
+
     TIM5->CR1 |= TIM_CR1_CEN;
 }
 
@@ -319,17 +321,17 @@ void port_ultrasound_start_new_measurement_timer()
 void port_ultrasound_stop_new_measurement_timer()
 {
     TIM5->CR1 &= ~TIM_CR1_CEN;
-    TIM5->SR = ~TIM_SR_UIF; // clear update interrupt flag
-    NVIC_DisableIRQ(TIM5_IRQn); // disable timer
+    // TIM5->SR = ~TIM_SR_UIF; // clear update interrupt flag
+    // NVIC_DisableIRQ(TIM5_IRQn); // disable timer
 }
 
 void port_ultrasound_stop_ultrasound(uint32_t ultrasound_id)
 {
     // ni idea hulio
-    NVIC_DisableIRQ(TIM5_IRQn);
-    NVIC_DisableIRQ(TIM2_IRQn);
-    NVIC_DisableIRQ(TIM3_IRQn);
-    
+    // NVIC_DisableIRQ(TIM5_IRQn);
+    // NVIC_DisableIRQ(TIM2_IRQn);
+    // NVIC_DisableIRQ(TIM3_IRQn);
+
     port_ultrasound_stop_trigger_timer(ultrasound_id);
     port_ultrasound_stop_echo_timer(ultrasound_id);
     port_ultrasound_stop_new_measurement_timer();
