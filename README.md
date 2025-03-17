@@ -2,8 +2,8 @@
 
 ## Authors
 
-* **Alumno 1** - email: [alumno@alumno.es](mailto:alumno@alumno.es)
-* **Alumno 2** - email: [alumno@alumno.es](mailto:alumno@alumno.es)
+* **Alumno 1** - email: [mateo.pansard@alumnos.upm.es](mailto:alumno@alumno.es)
+* **Alumno 2** - email: [lucia.petit@alumnos.upm.es](mailto:alumno@alumno.es)
 
 Ponga una breve descripción del proyecto **aquí** en castellano e inglés.
 
