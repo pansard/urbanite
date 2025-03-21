@@ -1,9 +1,9 @@
 /**
  * @file stm32f4_ultrasound.c
  * @brief Portable functions to interact with the ultrasound FSM library. All portable functions must be implemented in this file.
- * @author alumno1
- * @author alumno2
- * @date date
+ * @author Lucia Petit
+ * @author Mateo Pansard
+ * @date 21/03/2025
  */
 
 /* Standard C includes */
@@ -19,22 +19,36 @@
 #include "stm32f4_ultrasound.h"
 
 /* Typedefs --------------------------------------------------------------------*/
+/** @brief Structure to define the HW dependencies of aN ultrasound sensor*/
+
 typedef struct
 {
-    GPIO_TypeDef *p_trigger_port;
+    /** @brief GPIO where the trigger signal is connected. */
+    GPIO_TypeDef *p_trigger_port; 
+    /** @brief GPIO where the echo signal is connected. */
     GPIO_TypeDef *p_echo_port;
+    /** @brief Pin/line where the trigger signal is connected*/
     uint8_t trigger_pin;
+    /** @brief Pin/line where the echo signal is connected */
     uint8_t echo_pin;
+    /** @brief Alternate function for the echo signal*/
     uint8_t echo_alt_fun;
+    /** @brief Flag to indicate that a new measurement can be started */
     bool trigger_ready;
+    /** @brief Flag to indicate that the trigger signal has ended */
     bool trigger_end;
+    /** @brief Flag to indicate that the echo signal has been received */
     bool echo_received;
+    /** @briefTick time when the echo signal was received */
     uint32_t echo_init_tick;
+    /** @brief Tick time when the echo signal ended */
     uint32_t echo_end_tick;
+    /** @brief Number of overflows of the echo signal */
     uint32_t echo_overflows;
 } stm32f4_ultrasound_hw_t;
 
 /* Global variables */
+/** @brief Array of elements that represents the HW characteristics of the ultrasounds connected to the STM32F4 platform.s */
 static stm32f4_ultrasound_hw_t ultrasounds_arr[] = {
     [PORT_REAR_PARKING_SENSOR_ID] = {
         .p_trigger_port = STM32F4_REAR_PARKING_SENSOR_TRIGGER_GPIO,
@@ -44,6 +58,14 @@ static stm32f4_ultrasound_hw_t ultrasounds_arr[] = {
     }};
 
 /* Private functions ----------------------------------------------------------*/
+/**
+ * @brief Get the ultrasound struct with the given ID.
+ *
+ * @param ultrasound_id Ultrasound sensor ID.
+ *
+ * @return Pointer to the ultrasound sensor struct.
+ * @return NULL If the ultrasound sensor ID is not valid.
+ */
 stm32f4_ultrasound_hw_t *_stm32f4_ultrasound_get(uint32_t ultrasound_id)
 {
     if (ultrasound_id < sizeof(ultrasounds_arr) / sizeof(ultrasounds_arr[0]))
@@ -56,6 +78,9 @@ stm32f4_ultrasound_hw_t *_stm32f4_ultrasound_get(uint32_t ultrasound_id)
     }
 }
 
+/**
+ * @brief Configure the timer that controls the duration of the trigger signal.
+ */
 static void _timer_trigger_setup()
 {
     RCC->APB1ENR |= RCC_APB1ENR_TIM3EN;
@@ -84,6 +109,9 @@ static void _timer_trigger_setup()
     NVIC_SetPriority(TIM3_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(), 4, 0));
 }
 
+/**
+ * @brief Configure the timer that controls the duration of the echo signal.
+ */
 static void _timer_echo_setup()
 {
     // RCC->AHB1ENR |= RCC_AHB1ENR_GPIOAEN; // enable clock for GPIOA
@@ -107,6 +135,9 @@ static void _timer_echo_setup()
     NVIC_SetPriority(TIM2_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(), 3, 0)); // prioridad 3
 }
 
+/**
+ * @brief Configure the timer that controls the duration of the new measurement.
+ */
 static void _timer_new_measurement_setup() // SI ALGO SALE MAL REVISAR
 {
     RCC->APB1ENR |= RCC_APB1ENR_TIM5EN;

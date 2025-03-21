@@ -31,26 +31,6 @@ The system consists of four main modules:
 
 To turn off the system, the button must be held down for a long press. A **log message appears in debug mode**, and a demonstration video is available.
 
-Puede añadir una imagen de portada **de su propiedad** aquí. Por ejemplo, del montaje final, o una captura de osciloscopio, etc.
-
-**Las imágenes se deben guardar en la carpeta `docs/assets/imgs/` y se pueden incluir en el documento de la siguiente manera:**
-
-```markdown
-![Texto alternativo](docs/assets/imgs/imagen.png)
-```
-
-NOTA: **NO** añada el código ```markdown``` en el fichero `README.md` de su proyecto, sino lo de dentro. Este código es un para mostrar de forma literal cómo se puede añadir una imagen al fichero `README.md`.
-
-**Añada un enlace a un vídeo público de su propiedad aquí con la demostración del proyecto explicando lo que haya hecho en la versión V5.**
-
-Para añadir un enlace a un vídeo de Youtube, puede usar el siguiente código:
-
-```markdown
-[![Texto alternativo](docs/assets/imgs/imagen.png)](https://youtu.be/ID_DEL_VIDEO "Texto al pasar el ratón por encima de la imagen.")
-```
-
-NOTA: **NO** añada el código ```markdown``` sino lo de dentro. Este código es un para mostrar de forma literal cómo se puede añadir un enlace a un vídeo de Youtube al fichero `README.md`.
-
 ## Version 1
 
 In Version 1, the system works with the user button only. The user button is connected to the pin PC13. The code uses the EXTI13 interrupt to detect the button press.
@@ -122,6 +102,18 @@ This is the FSM of the ultrasonic transceiver:
 This is the FSM of the button: ![FSM del ultrasonic](docs/assets/imgs/fsm_ultrasound.png)
 
 
+## Version 3
+
+Breve descripción de la versión 3.
+
+## Version 4
+
+Breve descripción de la versión 4.
+
+## Version 5
+
+Breve descripción de la versión 5.
+
 * Para poner un texto en negrita se usa el símbolo `**` de manera consecutiva. Por ejemplo: **Texto en negrita**
 * Para poner un texto en cursiva se usa el símbolo `*` de manera consecutiva. Por ejemplo: *Texto en cursiva*
 * Para poner un texto en cursiva y negrita se usa el símbolo `***` de manera consecutiva. Por ejemplo: ***Texto en cursiva y negrita***
@@ -165,17 +157,21 @@ Para añadir un enlace a un fichero `.c` o `.h` puede usar el siguiente código.
 Enlace a la [FSM de Version 1](fsm__button_8c.html).
 ```
 
+
+Puede añadir una imagen de portada **de su propiedad** aquí. Por ejemplo, del montaje final, o una captura de osciloscopio, etc.
+
+**Las imágenes se deben guardar en la carpeta `docs/assets/imgs/` y se pueden incluir en el documento de la siguiente manera:**
+
+```markdown
+![Texto alternativo](docs/assets/imgs/imagen.png)
+```
+
+NOTA: **NO** añada el código ```markdown``` en el fichero `README.md` de su proyecto, sino lo de dentro. Este código es un para mostrar de forma literal cómo se puede añadir una imagen al fichero `README.md`.
+
+**Añada un enlace a un vídeo público de su propiedad aquí con la demostración del proyecto explicando lo que haya hecho en la versión V5.**
+
+
 NOTA: **NO** añada el código ```markdown``` sino lo de dentro. Este código es un para mostrar de forma literal cómo se puede añadir un enlace a un fichero `.c` o `.h` al fichero `README.md`.
 
 
-## Version 3
 
-Breve descripción de la versión 3.
-
-## Version 4
-
-Breve descripción de la versión 4.
-
-## Version 5
-
-Breve descripción de la versión 5.

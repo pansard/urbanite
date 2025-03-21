@@ -20,11 +20,16 @@
 #include "stm32f4_button.h" // Used to interact with the button FSM library
 
 /* Typedefs --------------------------------------------------------------------*/
+/** @brief Structure to define the HW dependencies of a button */
 typedef struct
 {
+    /** @brief GPIO where the button is connected */
     GPIO_TypeDef *p_port;
+    /** @brief Pin/line where the button is connected */
     uint8_t pin;
+    /** @brief Pull-up/pull-down mode of the button */
     uint8_t pupd_mode;
+    /** @brief Flag to indicate that the button is pressed */
     bool flag_pressed;
 } stm32f4_button_hw_t;
 
