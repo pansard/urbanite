@@ -1,9 +1,9 @@
 /**
  * @file fsm_ultrasound.c
  * @brief Ultrasound sensor FSM main file.
- * @author alumno1
- * @author alumno2
- * @date fecha
+ * @author Lucía Petit
+ * @author Mateo Pansard
+ * @date 21/03/2025
  */
 
 /* Includes ------------------------------------------------------------------*/
@@ -20,6 +20,11 @@
 #include "fsm.h"
 
 /* Typedefs --------------------------------------------------------------------*/
+
+/**
+ * @brief Structure to define the Ultrasound FSM.
+ *
+ */
 struct fsm_ultrasound_t
 {
     fsm_t f;
@@ -41,6 +46,13 @@ int _compare(const void *a, const void *b)
 
 /* State machine input or transition functions */
 
+/**
+ * @brief Check if the ultrasound sensor is active and ready to start a new measurement.
+ *
+ * @param p_this Pointer to an `fsm_t´ struct that contains an `fsm_ultrasound_t`.
+ * @return true
+ * @return false
+ */
 static bool check_on(fsm_t *p_this)
 {
     if (port_ultrasound_get_trigger_ready(((fsm_ultrasound_t *)p_this)->ultrasound_id))
@@ -50,17 +62,38 @@ static bool check_on(fsm_t *p_this)
     return false;
 }
 
+/**
+ * @brief Check if the ultrasound sensor has been set to be inactive (OFF).
+ *
+ * @param p_this Pointer to an `fsm_t´ struct that contains an `fsm_ultrasound_t`.
+ * @return true
+ * @return false
+ */
 static bool check_off(fsm_t *p_this)
 {
     bool stat = ((fsm_ultrasound_t *)p_this)->status;
     return !stat;
 }
 
+/**
+ * @brief Check if the ultrasound sensor has finished the trigger signal.
+ *
+ * @param p_this Pointer to an `fsm_t´ struct that contains an `fsm_ultrasound_t`.
+ * @return true
+ * @return false
+ */
 static bool check_trigger_end(fsm_t *p_this)
 {
     return port_ultrasound_get_trigger_end(((fsm_ultrasound_t *)p_this)->ultrasound_id);
 }
 
+/**
+ * @brief Check if the ultrasound sensor has received the init (rising edge in the input capture) of the echo signal.
+ *
+ * @param p_this Pointer to an `fsm_t´ struct that contains an `fsm_ultrasound_t`.
+ * @return true
+ * @return false
+ */
 static bool check_echo_init(fsm_t *p_this)
 {
     if (port_ultrasound_get_echo_init_tick(((fsm_ultrasound_t *)p_this)->ultrasound_id) > 0)
@@ -73,11 +106,25 @@ static bool check_echo_init(fsm_t *p_this)
     }
 }
 
+/**
+ * @brief Check if the ultrasound sensor has received the end (falling edge in the input capture) of the echo signal.
+ *
+ * @param p_this Pointer to an `fsm_t´ struct that contains an `fsm_ultrasound_t`.
+ * @return true
+ * @return false
+ */
 static bool check_echo_received(fsm_t *p_this)
 {
     return port_ultrasound_get_echo_received(((fsm_ultrasound_t *)p_this)->ultrasound_id);
 }
 
+/**
+ * @brief Check if a new measurement is ready.
+ *
+ * @param p_this Pointer to an `fsm_t´ struct that contains an `fsm_ultrasound_t`.
+ * @return true
+ * @return false
+ */
 static bool check_new_measurement(fsm_t *p_this)
 {
     return port_ultrasound_get_trigger_ready(((fsm_ultrasound_t *)p_this)->ultrasound_id);
@@ -85,22 +132,50 @@ static bool check_new_measurement(fsm_t *p_this)
 
 /* State machine output or action functions */
 
+/**
+ * @brief Start a measurement of the ultrasound transceiver for the first time after the FSM is started.
+ *
+ * @param p_this Pointer to an `fsm_t` struct that contains an `fsm_ultrasound_t`.
+ */
 static void do_start_measurement(fsm_t *p_this)
 {
     port_ultrasound_start_measurement(((fsm_ultrasound_t *)p_this)->ultrasound_id);
 }
 
+/**
+ * @brief Start a new measurement of the ultrasound transceiver.
+ *
+This function is called when the ultrasound sensor has finished a measurement and is ready to start a new one.
+ *
+ * @param p_this Pointer to an `fsm_t` struct that contains an `fsm_ultrasound_t`.
+ */
 static void do_start_new_measurement(fsm_t *p_this)
 {
     do_start_measurement(p_this);
 }
 
+/**
+ * @brief Stop the trigger signal of the ultrasound sensor.
+ *
+This function is called when the time to trigger the ultrasound sensor has finished. It stops the trigger signal and the trigger timer.
+ *
+ * @param p_this Pointer to an `fsm_t` struct that contains an `fsm_ultrasound_t`.
+ */
 static void do_stop_trigger(fsm_t *p_this)
 {
     port_ultrasound_stop_trigger_timer(((fsm_ultrasound_t *)p_this)->ultrasound_id);
     port_ultrasound_set_trigger_end(((fsm_ultrasound_t *)p_this)->ultrasound_id, false);
 }
 
+/**
+ * @brief Set the distance measured by the ultrasound sensor.
+ *
+ This function is called when the ultrasound sensor has received the echo signal. It calculates the distance in cm and stores it in the array of distances.
+ *
+ When the array is full, it computes the median of the array and resets the index of the array.
+ *
+ * @param p_this Pointer to an `fsm_t` struct that contains an `fsm_ultrasound_t`.
+ */
 static void do_set_distance(fsm_t *p_this)
 {
     // port_ultrasound_reset_echo_ticks(((fsm_ultrasound_t *)p_this)->ultrasound_id); // echo signal cleared
@@ -131,12 +206,24 @@ static void do_set_distance(fsm_t *p_this)
     port_ultrasound_reset_echo_ticks(((fsm_ultrasound_t *)p_this)->ultrasound_id);
 }
 
+/**
+ * @brief Stop the ultrasound sensor. 
+ * 
+ This function is called when the ultrasound sensor is stopped. It stops the ultrasound sensor and resets the echo ticks.
+ * 
+ * @param p_this Pointer to an `fsm_t` struct that contains an `fsm_ultrasound_t`.
+ */
 static void do_stop_measurement(fsm_t *p_this)
 {
     port_ultrasound_stop_ultrasound(((fsm_ultrasound_t *)p_this)->ultrasound_id);
 }
 
 /* FSM states */
+
+/**
+ * @brief Array representing the transitions table of the FSM ultrasound. 
+ * 
+ */
 fsm_trans_t fsm_trans_ultrasound[] = {
     {WAIT_START, check_on, TRIGGER_START, do_start_measurement},
     {TRIGGER_START, check_trigger_end, WAIT_ECHO_START, do_stop_trigger},

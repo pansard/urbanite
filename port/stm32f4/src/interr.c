@@ -4,6 +4,7 @@
  * @author SDG2. Román Cárdenas (r.cardenas@upm.es) and Josué Pagán (j.pagan@upm.es)
  * @date 2025-01-01
  */
+
 // Include HW dependencies:
 #include "stm32f4_system.h"
 #include "stm32f4_button.h"
@@ -76,10 +77,10 @@ void TIM3_IRQHandler(void)
 }
 
 /**
- * @brief Interrupt service routine for the TIM2 timer. 
-
+ * @brief Interrupt service routine for the TIM2 timer.
+ *
 This timer controls the duration of the echo signal of the ultrasound sensor by means of the input capture mode.
- * 
+ *
  */
 void TIM2_IRQHandler(void)
 {
@@ -108,6 +109,12 @@ void TIM2_IRQHandler(void)
     }
 }
 
+/**
+ * @brief Interrupt service routine for the TIM5 timer. 
+ * 
+ This timer controls the duration of the measurements of the ultrasound sensor. When the interrupt occurs it means that the time of the a measurement has expired and a new measurement can be started.
+ * 
+ */
 void TIM5_IRQHandler(void)
 {
     TIM5->SR &= ~TIM_SR_UIF;
