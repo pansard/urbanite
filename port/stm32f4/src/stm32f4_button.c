@@ -1,9 +1,9 @@
 /**
  * @file stm32f4_button.c
  * @brief Portable functions to interact with the button FSM library. All portable functions must be implemented in this file.
- * @author alumno1
- * @author alumno2
- * @date fecha
+ * @author Lucía Petit
+ * @author Mateo Pansard
+ * @date 25-3-2025
  */
 
 /* Includes ------------------------------------------------------------------*/

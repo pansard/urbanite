@@ -1,9 +1,9 @@
 /**
  * @file stm32f4_button.h
  * @brief Header for stm32f4_button.c file.
- * @author alumno1
- * @author alumno2
- * @date fecha
+ * @author Lucía Petit
+ * @author Mateo Pansard
+ * @date 25-3-2025
  */
 #ifndef STM32F4_BUTTON_H_
 #define STM32F4_BUTTON_H_
@@ -29,6 +29,6 @@
  * @param pin New GPIO pin for the button.
  *
  */
-void stm32f4_button_set_new_gpio(uint32_t button_id, GPIO_TypeDef *p_port, uint8_t pin); //DOCUMENTAR DOXYGEN
+void stm32f4_button_set_new_gpio(uint32_t button_id, GPIO_TypeDef *p_port, uint8_t pin);
 
 #endif /* STM32F4_BUTTON_H_ */
