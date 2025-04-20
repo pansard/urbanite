@@ -15,10 +15,10 @@
 #include <stdbool.h>
 
 /* Defines and enums ----------------------------------------------------------*/
-#define PORT_REAR_PARKING_SENSOR_ID 0
-#define PORT_PARKING_SENSOR_TRIGGER_UP_US 10
-#define PORT_PARKING_SENSOR_TIMEOUT_MS 100
-#define SPEED_OF_SOUND_MS 343
+#define PORT_REAR_PARKING_SENSOR_ID 0  /*!<Rear parking sensor identifier */
+#define PORT_PARKING_SENSOR_TRIGGER_UP_US 10 /*!< Duration in microseconds of the trigger signal */
+#define PORT_PARKING_SENSOR_TIMEOUT_MS 100 /*!< Time in ms to wait for the next measurement */
+#define SPEED_OF_SOUND_MS 343         /*!< Speed of sound in air in m/s */
 
 /* Function prototypes and explanation -------------------------------------------------*/
 

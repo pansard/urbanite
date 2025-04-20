@@ -3,7 +3,7 @@
  * @brief Header for the portable functions to interact with the HW of the buttons. The functions must be implemented in the platform-specific code.
  * @author Lucia Petit
  * @author Mateo Pansard
- * @date fecha
+ * @date 2025-03-9
  */
 
 #ifndef PORT_BUTTON_H_

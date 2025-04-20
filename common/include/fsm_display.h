@@ -34,5 +34,24 @@ enum FSM_DISPLAY_SYSTEM {
 typedef struct fsm_display_t fsm_display_t;
 
 /* Function prototypes and explanation -------------------------------------------------*/
+fsm_display_t * fsm_display_new (uint32_t display_id);
 
+void fsm_display_destroy (fsm_display_t * p_fsm);
+
+void fsm_display_set_distance (fsm_display_t *p_fsm, uint32_t distance_cm);
+
+void fsm_display_fire (fsm_display_t *p_fsm);
+
+bool fsm_display_get_status (fsm_display_t *p_fsm);
+
+void fsm_display_set_status (fsm_display_t *p_fsm, bool pause);
+
+bool fsm_display_check_activity (fsm_display_t *p_fsm);
+ 
+fsm_t * fsm_display_get_inner_fsm (fsm_display_t *p_fsm);
+
+uint32_t fsm_display_get_state (fsm_display_t *p_fsm);
+
+void fsm_display_set_state (fsm_display_t *p_fsm, int8_t state);
+ 
 #endif /* FSM_DISPLAY_SYSTEM_H_ */

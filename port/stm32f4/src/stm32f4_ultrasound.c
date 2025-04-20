@@ -3,7 +3,7 @@
  * @brief Portable functions to interact with the ultrasound FSM library. All portable functions must be implemented in this file.
  * @author Lucia Petit
  * @author Mateo Pansard
- * @date 21/03/2025
+ * @date 2025-03-21
  */
 
 /* Standard C includes */
