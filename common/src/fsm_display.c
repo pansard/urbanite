@@ -59,14 +59,24 @@ static bool check_off (fsm_t *p_this){
 }
 
 /* State machine output or action functions */
-static void do_set_on (fsm_t *p_this);
+static void do_set_on (fsm_t *p_this){
+    fsm_display_t *p_fsm_display = (fsm_display_t *)p_this;
+    port_display_set_rgb(p_fsm_display->display_id, COLOR_OFF); //all duty cycle 0 es asi?
+}
 
-static void do_set_color (fsm_t *p_this);
+static void do_set_color (fsm_t *p_this){
+    fsm_display_t *p_fsm_display = (fsm_display_t *)p_this;
+    rgb_color_t color;
+    _compute_display_levels(&color, p_fsm_display->distance_cm);
+    port_display_set_rgb(p_fsm_display->display_id, color);
+    p_fsm_display->new_color = false;
+    p_fsm_display->idle = true;
+}
 
 static void do_set_off (fsm_t *p_this){
     fsm_display_t *p_fsm_display = (fsm_display_t *)p_this;
-    port_display_set_rgb(p_fsm_display->display_id, COLOR_OFF);
-    p_fsm_display->idle = false;
+    port_display_set_rgb(p_fsm_display->display_id, COLOR_OFF); //este esta bien
+    p_fsm_display->idle = false; //puede que le falte algo
 }
 /* Other auxiliary functions */
 static void fsm_display_init (fsm_display_t *p_fsm_display, uint32_t display_id);
