@@ -79,7 +79,15 @@ static void do_set_off (fsm_t *p_this){
     p_fsm_display->idle = false; //puede que le falte algo
 }
 /* Other auxiliary functions */
-static void fsm_display_init (fsm_display_t *p_fsm_display, uint32_t display_id);
+static void fsm_display_init (fsm_display_t *p_fsm_display, uint32_t display_id){
+    fsm_init(&p_fsm_display->f, fsm_trans_display);
+    p_fsm_display->display_id = display_id;
+    p_fsm_display->distance_cm = 10000; //inicializar a un valor que no se use
+    p_fsm_display->new_color = false;
+    p_fsm_display->status = false;
+    p_fsm_display->idle = false;
+    port_display_init(display_id);
+}
 /* Public functions -----------------------------------------------------------*/
 fsm_display_t *fsm_display_new(uint32_t display_id)
 {
@@ -88,22 +96,47 @@ fsm_display_t *fsm_display_new(uint32_t display_id)
     return p_fsm_display;
 };
 
-void fsm_display_destroy (fsm_display_t * p_fsm);
+void fsm_display_destroy (fsm_display_t * p_fsm){
+    free(p_fsm);
+}
 
-void fsm_display_fire (fsm_display_t * p_fsm);
+void fsm_display_fire (fsm_display_t * p_fsm){
+    fsm_fire(&p_fsm->f);
+}
 
-void fsm_display_set_distance (fsm_display_t *p_fsm, uint32_t distance_cm);
 
-bool fsm_display_get_status (fsm_display_t *p_fsm);
+void fsm_display_set_distance (fsm_display_t *p_fsm, uint32_t distance_cm){
+    p_fsm->distance_cm = distance_cm;
+    p_fsm->new_color = true;
+}
 
-void fsm_display_set_status (fsm_display_t *p_fsm, bool pause);
+bool fsm_display_get_status (fsm_display_t *p_fsm){
+    return p_fsm->status;
+}
 
-bool fsm_display_check_activity (fsm_display_t *p_fsm);
+void fsm_display_set_status (fsm_display_t *p_fsm, bool pause){
+    p_fsm->status = pause;
+}
 
-fsm_t * fsm_display_get_inner_fsm (fsm_display_t *p_fsm);
+bool fsm_display_check_activity (fsm_display_t *p_fsm){
+    return p_fsm->status && !p_fsm->idle; //triplazo
+}
 
-uint32_t fsm_display_get_state (fsm_display_t *p_fsm);
+fsm_t * fsm_display_get_inner_fsm (fsm_display_t *p_fsm){
+    return &p_fsm->f;
+}
 
-void fsm_display_set_state (fsm_display_t *p_fsm, int8_t state);
+uint32_t fsm_display_get_state (fsm_display_t *p_fsm){
+    return fsm_get_state(&p_fsm->f);
+}
 
-static fsm_trans_t fsm_trans_display[] = {};
+void fsm_display_set_state (fsm_display_t *p_fsm, int8_t state){
+    fsm_set_state(&p_fsm->f, state);
+}
+
+static fsm_trans_t fsm_trans_display[] = {
+    { WAIT_DISPLAY, check_active, SET_DISPLAY, do_set_on },
+    { SET_DISPLAY, check_set_new_color,  SET_DISPLAY, do_set_color},
+    { SET_DISPLAY, check_off, WAIT_DISPLAY, do_set_off},
+    { -1, NULL, -1, NULL }
+};
