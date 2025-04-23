@@ -169,3 +169,12 @@ uint32_t fsm_button_get_state(fsm_button_t *p_fsm)
 {
     return p_fsm->f.current_state;
 }
+
+bool fsm_button_check_activity(fsm_button_t *p_fsm)
+{
+    if (p_fsm->f.current_state == BUTTON_RELEASED){
+        return false;
+    } else {
+        return true;
+    }
+}

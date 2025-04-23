@@ -48,4 +48,14 @@ void port_system_delay_ms(uint32_t ms);
  */
 void port_system_delay_until_ms(uint32_t *t, uint32_t ms);
 
+void port_system_systick_suspend(void);
+
+void port_system_systick_resume(void);
+
+void port_system_power_stop(void);
+
+void port_system_power_sleep(void);
+
+void port_system_sleep(void);
+
 #endif /* PORT_SYSTEM_H_ */

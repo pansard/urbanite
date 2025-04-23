@@ -47,6 +47,7 @@ void SysTick_Handler(void)
  */
 void EXTI15_10_IRQHandler(void)
 {
+    port_system_systick_resume(); // Resume SysTick interrupt
     // ISR parking button
     if (port_button_get_pending_interrupt(PORT_PARKING_BUTTON_ID))
     {
@@ -84,6 +85,8 @@ This timer controls the duration of the echo signal of the ultrasound sensor by 
  */
 void TIM2_IRQHandler(void)
 {
+    port_system_systick_resume(); // Resume SysTick interrupt
+    
     uint32_t overflows = port_ultrasound_get_echo_overflows(PORT_REAR_PARKING_SENSOR_ID);
     uint32_t echo_init_tick = port_ultrasound_get_echo_init_tick(PORT_REAR_PARKING_SENSOR_ID);
     uint32_t echo_end_tick = port_ultrasound_get_echo_end_tick(PORT_REAR_PARKING_SENSOR_ID);

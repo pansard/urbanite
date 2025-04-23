@@ -188,6 +188,16 @@ void port_system_set_millis(uint32_t ms)
   msTicks = ms;
 }
 
+void port_system_systick_suspend()
+{
+ SysTick->CTRL &= ~SysTick_CTRL_TICKINT_Msk;
+}
+
+void port_system_systick_resume()
+{
+  SysTick->CTRL |= SysTick_CTRL_TICKINT_Msk;
+}
+
 // ------------------------------------------------------
 // Implementation of PORT system functions that are called from the platform-dependent code.
 // i.e., the following functions do depend on the platform and are declared in the
@@ -324,3 +334,23 @@ void 	stm32f4_system_gpio_write(GPIO_TypeDef *p_port, uint8_t pin, bool value) {
     p_port->BSRR |= BIT_POS_TO_MASK(pin) << 0x10;
   }
 } 
+
+void port_system_power_stop()
+{
+ MODIFY_REG(PWR->CR, (PWR_CR_PDDS | PWR_CR_LPDS), PWR_CR_LPDS);   // Select the regulator state in Stop mode: Set PDDS and LPDS bits according to PWR_Regulator value
+ SCB->SCR |= ((uint32_t)SCB_SCR_SLEEPDEEP_Msk);   // Set SLEEPDEEP bit of Cortex System Control Register
+ __WFI(); // Select Stop mode entry : Request Wait For Interrupt
+ SCB->SCR &= ~((uint32_t)SCB_SCR_SLEEPDEEP_Msk); // Reset SLEEPDEEP bit of Cortex System Control Register
+}
+
+void port_system_power_sleep()
+{
+ MODIFY_REG(PWR->CR, (PWR_CR_PDDS | PWR_CR_LPDS), PWR_CR_LPDS);   // Select the regulator state in Stop mode: Set PDDS and LPDS bits according to PWR_Regulator value
+ SCB->SCR &= ~((uint32_t)SCB_SCR_SLEEPDEEP_Msk);   // Reset SLEEPDEEP bit of Cortex System Control Register
+ __WFI(); // Select Sleep mode entry : Request Wait For Interrupt
+}
+
+void port_system_sleep (void) {
+  port_system_systick_suspend(); // Suspend SysTick interrupt
+  port_system_power_sleep(); // Enter Sleep mode
+}

@@ -79,6 +79,13 @@ static void do_set_off (fsm_t *p_this){
     p_fsm_display->idle = false; //puede que le falte algo
 }
 /* Other auxiliary functions */
+static fsm_trans_t fsm_trans_display[] = {
+    { WAIT_DISPLAY, check_active, SET_DISPLAY, do_set_on },
+    { SET_DISPLAY, check_set_new_color,  SET_DISPLAY, do_set_color},
+    { SET_DISPLAY, check_off, WAIT_DISPLAY, do_set_off},
+    { -1, NULL, -1, NULL }
+};
+
 static void fsm_display_init (fsm_display_t *p_fsm_display, uint32_t display_id){
     fsm_init(&p_fsm_display->f, fsm_trans_display);
     p_fsm_display->display_id = display_id;
@@ -133,10 +140,3 @@ uint32_t fsm_display_get_state (fsm_display_t *p_fsm){
 void fsm_display_set_state (fsm_display_t *p_fsm, int8_t state){
     fsm_set_state(&p_fsm->f, state);
 }
-
-static fsm_trans_t fsm_trans_display[] = {
-    { WAIT_DISPLAY, check_active, SET_DISPLAY, do_set_on },
-    { SET_DISPLAY, check_set_new_color,  SET_DISPLAY, do_set_color},
-    { SET_DISPLAY, check_off, WAIT_DISPLAY, do_set_off},
-    { -1, NULL, -1, NULL }
-};

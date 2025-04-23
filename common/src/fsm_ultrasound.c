@@ -329,3 +329,8 @@ bool fsm_ultrasound_get_new_measurement_ready(fsm_ultrasound_t *p_fsm)
 {
     return p_fsm->new_measurement;
 }
+
+bool fsm_ultrasound_check_activity(fsm_ultrasound_t *p_fsm)
+{
+    return false;
+}
