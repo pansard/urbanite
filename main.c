@@ -36,16 +36,17 @@ int main(void)
     port_system_init();
 
     /* Create state machines */
-    fsm_t* p_fsm_button = fsm_button_new(PORT_PARKING_BUTTON_DEBOUNCE_TIME_MS, PORT_PARKING_BUTTON_ID);
-    fsm_t* p_fsm_ultrasound_rear = fsm_ultrasound_new( PORT_REAR_PARKING_SENSOR_ID);
-    fsm_t* p_fsm_display_rear = fsm_display_new( PORT_REAR_PARKING_DISPLAY_ID);
+    fsm_button_t* p_fsm_button = fsm_button_new(PORT_PARKING_BUTTON_DEBOUNCE_TIME_MS, PORT_PARKING_BUTTON_ID);
+    fsm_ultrasound_t* p_fsm_ultrasound_rear = fsm_ultrasound_new( PORT_REAR_PARKING_SENSOR_ID);
+    fsm_display_t* p_fsm_display_rear = fsm_display_new( PORT_REAR_PARKING_DISPLAY_ID);
 
-    fsm_t *p_fsm_urbanite = fsm_urbanite_new(
+    fsm_urbanite_t *p_fsm_urbanite = fsm_urbanite_new(
         p_fsm_button,
         URBANITE_ON_OFF_PRESS_TIME_MS,
         URBANITE_PAUSE_DISPLAY_TIME_MS,
         p_fsm_ultrasound_rear,
-        p_fsm_display_rear);
+        p_fsm_display_rear
+    );
 
     /* Infinite loop */
     while (1)

@@ -126,7 +126,7 @@ void fsm_display_set_status (fsm_display_t *p_fsm, bool pause){
 }
 
 bool fsm_display_check_activity (fsm_display_t *p_fsm){
-    return p_fsm->status && !p_fsm->idle; //triplazo
+    return (p_fsm->status == true && p_fsm->idle == false); //triplazo
 }
 
 fsm_t * fsm_display_get_inner_fsm (fsm_display_t *p_fsm){
