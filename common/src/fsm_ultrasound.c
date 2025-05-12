@@ -55,11 +55,10 @@ int _compare(const void *a, const void *b)
  */
 static bool check_on(fsm_t *p_this)
 {
-    if (port_ultrasound_get_trigger_ready(((fsm_ultrasound_t *)p_this)->ultrasound_id))
-    {
-        return true;
-    }
-    return false;
+    fsm_ultrasound_t *ultrasound = ((fsm_ultrasound_t *)p_this);
+    bool readyId = port_ultrasound_get_trigger_ready(ultrasound->ultrasound_id);
+    bool readyStatus = ultrasound->status;
+    return readyId && readyStatus;
 }
 
 /**

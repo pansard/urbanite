@@ -62,7 +62,6 @@ void EXTI15_10_IRQHandler(void)
         }
         port_button_clear_pending_interrupt(PORT_PARKING_BUTTON_ID);
     }
-    EXTI->PR |= BIT_POS_TO_MASK(PORT_PARKING_BUTTON_ID);
 }
 
 /**

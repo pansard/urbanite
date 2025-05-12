@@ -116,7 +116,7 @@ bool port_button_get_pending_interrupt(uint32_t button_id)
 void port_button_clear_pending_interrupt(uint32_t button_id)
 {
     stm32f4_button_hw_t *p_button = _stm32f4_button_get(button_id);
-    stm32f4_system_gpio_write(p_button->p_port, p_button->pin, false);//Igual no es esta función?
+    EXTI->PR = BIT_POS_TO_MASK(p_button->pin);
 }
 
 void port_button_disable_interrupts(uint32_t button_id)

@@ -159,12 +159,12 @@ static void do_sleep_while_on(fsm_t *p_this)
 }
 
 static fsm_trans_t fsm_trans_urbanite[] = {
-    {OFF, check_no_activity, SLEEP_WHILE_OFF, do_sleep_off},
     {OFF, check_on, MEASURE, do_start_up_measure},
+    {OFF, check_no_activity, SLEEP_WHILE_OFF, do_sleep_off},
     {MEASURE, check_off, OFF, do_stop_urbanite},
-    {MEASURE, check_no_activity, SLEEP_WHILE_ON, do_sleep_while_measure},
     {MEASURE, check_new_measure, MEASURE, do_display_distance},
     {MEASURE, check_pause_display, MEASURE, do_pause_display},
+    {MEASURE, check_no_activity, SLEEP_WHILE_ON, do_sleep_while_measure},
     {SLEEP_WHILE_ON, check_activity_in_measure, MEASURE, NULL},
     {SLEEP_WHILE_ON, check_no_activity, SLEEP_WHILE_ON, do_sleep_while_on},
     {SLEEP_WHILE_OFF, check_activity, OFF, NULL},
@@ -201,9 +201,9 @@ fsm_urbanite_t *fsm_urbanite_new(fsm_button_t *p_fsm_button,
 
 void fsm_urbanite_fire(fsm_urbanite_t *p_fsm_urbanite)
 {
+    //printf("[URBANITE][%ld] Urbanite system state: %d\n", port_system_get_millis(), p_fsm_urbanite->f.current_state);
     fsm_fire(&p_fsm_urbanite->f);
     //printf("[URBANITE][%ld] Urbanite system activity check\n", fsm_button_get_duration(p_fsm_urbanite->p_fsm_button));
-    printf("[URBANITE][%ld] Urbanite system state: %d\n", port_system_get_millis(), p_fsm_urbanite->f.current_state);
 }
 
 void fsm_urbanite_destroy(fsm_urbanite_t *p_fsm_urbanite)
