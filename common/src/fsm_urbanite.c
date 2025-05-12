@@ -107,7 +107,7 @@ static void do_pause_display(fsm_t *p_this)
 
     fsm_button_reset_duration(button);
     urbanite->is_paused = !(urbanite->is_paused);
-    fsm_display_set_status(display, urbanite->is_paused);
+    fsm_display_set_status(display, !urbanite->is_paused);
     if (urbanite->is_paused)
     {
         printf("[URBANITE][%ld] Urbanite system display PAUSE\n", port_system_get_millis());
