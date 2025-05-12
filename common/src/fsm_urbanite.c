@@ -108,8 +108,14 @@ static void do_pause_display(fsm_t *p_this)
     fsm_button_reset_duration(button);
     urbanite->is_paused = !(urbanite->is_paused);
     fsm_display_set_status(display, urbanite->is_paused);
-    printf("[URBANITE][%ld] Urbanite system display PAUSE\n", port_system_get_millis());
-    printf("[URBANITE][%ld] Urbanite system display RESUME\n", port_system_get_millis());
+    if (urbanite->is_paused)
+    {
+        printf("[URBANITE][%ld] Urbanite system display PAUSE\n", port_system_get_millis());
+    }
+    else
+    {
+        printf("[URBANITE][%ld] Urbanite system display RESUME\n", port_system_get_millis());
+    }
 }
 
 static void do_display_distance(fsm_t *p_this)
