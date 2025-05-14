@@ -17,7 +17,24 @@
 #include "fsm_button.h"
 #include "fsm.h"
 
-
+/**
+ * @brief Structure of the Button FSM.
+*/
+/** 
+ * @var fsm_button_t::f
+ * Button FSM
+ * @var fsm_button_t::debounce_time_ms
+ * Debounce time in ms.
+ * @var fsm_button_t::next_timeout
+ * Next timeout for the FSM.
+ * @var fsm_button_t::tick_pressed
+ * Tick when the button was pressed.
+ * @var fsm_button_t::duration
+ * Duration of the button pressed.
+ * @var fsm_button_t::button_id
+ * Button ID.
+ * 
+ */
 struct fsm_button_t {
     fsm_t f; /* Base struct for FSMs */
     uint32_t debounce_time_ms; /* Debounce time in ms */

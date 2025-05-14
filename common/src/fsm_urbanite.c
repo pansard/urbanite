@@ -4,6 +4,17 @@
 #include "fsm.h"
 #include "fsm_urbanite.h"
 
+/**
+ * @brief Structure of the Urbanite FSM.
+ * 
+ * @var fsm_t FSM structure
+ * @var fsm_button_t Pointer to the button FSM
+ * @var uint32_t on_off_press_time_ms Time in milliseconds for the button press to turn on/off the system
+ * @var uint32_t pause_display_time_ms Time in milliseconds for the button press to pause/resume the display
+ * @var bool is_paused Flag to indicate if the display is paused
+ * @var fsm_ultrasound_t Pointer to the ultrasound FSM
+ * @var fsm_display_t Pointer to the display FSM
+ */
 struct fsm_urbanite_t
 {
     fsm_t f;
@@ -17,6 +28,13 @@ struct fsm_urbanite_t
 
 /* STATE MACHINE INPUT FUNCTIONS */
 
+/**
+ * @brief Check if the button is pressed for a certain time to turn on the system.
+ * 
+ * @param p_this 
+ * @return true 
+ * @return false 
+ */
 static bool check_on(fsm_t *p_this)
 {
     fsm_urbanite_t *urbanite = ((fsm_urbanite_t *)p_this);
@@ -26,11 +44,25 @@ static bool check_on(fsm_t *p_this)
     return (valor > 0 && valor > urbanite->on_off_press_time_ms);
 }
 
+/**
+ * @brief Check if the button is pressed for a certain time to turn off the system.
+ * 
+ * @param p_this 
+ * @return true 
+ * @return false 
+ */
 static bool check_off(fsm_t *p_this)
 {
     return check_on(p_this);
 }
 
+/**
+ * @brief Check if a new measurement is ready from the ultrasound sensor.
+ * 
+ * @param p_this 
+ * @return true 
+ * @return false 
+ */
 static bool check_new_measure(fsm_t *p_this)
 {
     fsm_urbanite_t *urbanite = ((fsm_urbanite_t *)p_this);
@@ -38,6 +70,13 @@ static bool check_new_measure(fsm_t *p_this)
     return fsm_ultrasound_get_new_measurement_ready(measure);
 }
 
+/**
+ * @brief Check if the button is pressed for a certain time to pause the display.
+ * 
+ * @param p_this 
+ * @return true 
+ * @return false 
+ */
 static bool check_pause_display(fsm_t *p_this)
 {
     fsm_urbanite_t *urbanite = ((fsm_urbanite_t *)p_this);
@@ -53,6 +92,13 @@ static bool check_pause_display(fsm_t *p_this)
     }
 }
 
+/**
+ * @brief Check if there is activity in the system.
+ * 
+ * @param p_this 
+ * @return true 
+ * @return false 
+ */
 static bool check_activity(fsm_t *p_this)
 {
     fsm_urbanite_t *urbanite = ((fsm_urbanite_t *)p_this);
@@ -60,11 +106,25 @@ static bool check_activity(fsm_t *p_this)
     return (fsm_button_check_activity(urbanite->p_fsm_button) || fsm_display_check_activity(urbanite->p_fsm_display_rear) || fsm_ultrasound_check_activity(urbanite->p_fsm_ultrasound_rear));
 }
 
+/**
+ * @brief Check if there is no activity in the system.
+ * 
+ * @param p_this 
+ * @return true 
+ * @return false 
+ */
 static bool check_no_activity(fsm_t *p_this)
 {
     return !check_activity(p_this);
 }
 
+/**
+ * @brief Check if there is activity during the measurement state.
+ * 
+ * @param p_this 
+ * @return true 
+ * @return false 
+ */
 static bool check_activity_in_measure(fsm_t *p_this)
 {
     return check_new_measure(p_this);

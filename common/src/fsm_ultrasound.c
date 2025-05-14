@@ -24,6 +24,20 @@
 /**
  * @brief Structure to define the Ultrasound FSM.
  *
+ * @var fsm_ultrasound_t::f
+ * Button FSM 
+ * @var fsm_ultrasound_t::distance_cm
+ * Distance measured by the ultrasound sensor in cm.
+ * @var fsm_ultrasound_t::status
+ * Status of the ultrasound sensor (ON/OFF).
+ * @var fsm_ultrasound_t::new_measurement
+ * Flag to indicate if a new measurement is ready.
+ * @var fsm_ultrasound_t::ultrasound_id
+ * ID of the ultrasound sensor.
+ * @var fsm_ultrasound_t::distance_arr
+ * Array to store the distances measured by the ultrasound sensor.
+ * @var fsm_ultrasound_t::distance_idx
+ * Index of the distance array.
  */
 struct fsm_ultrasound_t
 {
@@ -39,6 +53,13 @@ struct fsm_ultrasound_t
 /* Private functions -----------------------------------------------------------*/
 
 // Comparison function for qsort
+/**
+ * @brief Comparison function for qsort.
+ * 
+ * @param a 
+ * @param b 
+ * @return int 
+ */
 int _compare(const void *a, const void *b)
 {
     return (*(uint32_t *)a - *(uint32_t *)b);
@@ -233,6 +254,12 @@ fsm_trans_t fsm_trans_ultrasound[] = {
     {-1, NULL, -1, NULL}};
 
 /* Other auxiliary functions */
+/**
+ * @brief Initialize a button FSM.
+ * 
+ * @param p_fsm_ultrasound 
+ * @param ultrasound_id 
+ */
 void fsm_ultrasound_init(fsm_ultrasound_t *p_fsm_ultrasound, uint32_t ultrasound_id)
 {
     // Initialize the FSM

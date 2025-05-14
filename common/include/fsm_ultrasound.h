@@ -79,7 +79,7 @@ fsm_ultrasound_t *fsm_ultrasound_new(uint32_t ultrasound_id);
  *
 This function destroys an ultrasound transceiver FSM and frees the memory.
  *
- * @param p_fsm_ultrasound Pointer to an `fsm_ultrasound_t` struct.
+ * @param p_fsm Pointer to an `fsm_ultrasound_t` struct.
  */
 void fsm_ultrasound_destroy(fsm_ultrasound_t *p_fsm);
 
