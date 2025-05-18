@@ -21,20 +21,22 @@
 /* Defines --------------------------------------------------------------------*/
 
 /* Typedefs --------------------------------------------------------------------*/
-/** @brief Structure to define the HW dependencies of a display */
+/** @brief Structure to define the HW dependencies of a display 
+ *
+*/
 typedef struct
 {
-    /** @brief //GPIO where the RED LED is connected*/
+    /** @brief GPIO where the RED LED is connected*/
     GPIO_TypeDef *p_port_red;  
-    /** @brief //Pin where the RED LED is connected*/
+    /** @brief Pin where the RED LED is connected*/
     uint8_t pin_red;         
-    /** @brief //GPIO where the GREEN LED is connected*/
+    /** @brief GPIO where the GREEN LED is connected*/
     GPIO_TypeDef *p_port_green; 
-    /** @brief //Pin where the GREEN LED is connected*/
+    /** @brief Pin where the GREEN LED is connected*/
     uint8_t pin_green;      
-    /** @brief //GPIO where the BLUE LED is connected*/
+    /** @brief GPIO where the BLUE LED is connected*/
     GPIO_TypeDef *p_port_blue; 
-    /** @brief //Pin where the BLUE LED is connected*/
+    /** @brief Pin where the BLUE LED is connected*/
     uint8_t pin_blue;       
 } stm32f4_display_hw_t;
 
@@ -50,6 +52,12 @@ static stm32f4_display_hw_t displays_arr[] = {
         .pin_blue = STM32F4_REAR_PARKING_DISPLAY_RGB_B_PIN}};  
 
 /* Private functions -----------------------------------------------------------*/
+/**
+ * @brief Get the display struct with the given ID. 
+ * 
+ * @param display_id Button ID.
+ * @return stm32f4_display_hw_t* NULL If the display ID is not valid. 
+ */
 stm32f4_display_hw_t *_stm32f4_display_get(uint32_t display_id)
 {
     // Return the pointer to the display with the given ID. If the ID is not valid, return NULL.
@@ -65,6 +73,14 @@ stm32f4_display_hw_t *_stm32f4_display_get(uint32_t display_id)
 }
 
 /* Public functions -----------------------------------------------------------*/
+
+/**
+ * @brief Configure the timer that controls the PWM of each one of the RGB LEDs of the display system. 
+ * 
+ * This function is called by the port_display_init() public function to configure the timer that controls the PWM of the RGB LEDs of the display.
+ * 
+ * @param display_id Display system identifier number.
+ */
 void _timer_pwm_config(uint32_t display_id)
 {
     if (_stm32f4_display_get(display_id) != NULL)

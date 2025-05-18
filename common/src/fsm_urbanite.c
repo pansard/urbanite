@@ -15,29 +15,22 @@
 /**
  * @brief Structure of the Urbanite FSM.
  * 
- * @var fsm_t FSM structure
- * @var fsm_button_t Pointer to the button FSM
- * @var uint32_t on_off_press_time_ms Time in milliseconds for the button press to turn on/off the system
- * @var uint32_t pause_display_time_ms Time in milliseconds for the button press to pause/resume the display
- * @var bool is_paused Flag to indicate if the display is paused
- * @var fsm_ultrasound_t Pointer to the ultrasound FSM
- * @var fsm_display_t Pointer to the display FSM
  */
 struct fsm_urbanite_t
 {
-    /** @brief //Base struct for FSMs */
+    /** @brief Base struct for FSMs */
     fsm_t f; 
-    /** @brief //Pointer to the button FSM */
+    /** @brief Pointer to the button FSM */
     fsm_button_t *p_fsm_button; 
-    /** @brief //Time in milliseconds for the button press to turn on/off the system */
+    /** @brief Time in milliseconds for the button press to turn on/off the system */
     uint32_t on_off_press_time_ms; 
-    /** @brief //Time in milliseconds for the button press to pause/resume the display */
+    /** @brief Time in milliseconds for the button press to pause/resume the display */
     uint32_t pause_display_time_ms; 
-    /** @brief //Flag to indicate if the display is paused */
+    /** @brief Flag to indicate if the display is paused */
     bool is_paused; 
-    /** @brief //Pointer to the ultrasound FSM */
+    /** @brief Pointer to the ultrasound FSM */
     fsm_ultrasound_t *p_fsm_ultrasound_rear;  
-    /** @brief //Pointer to the display FSM */
+    /** @brief Pointer to the display FSM */
     fsm_display_t *p_fsm_display_rear; 
 };
 
@@ -147,6 +140,11 @@ static bool check_activity_in_measure(fsm_t *p_this)
 
 /* STATE MACHINE OUTPUT FUNCTIONS */
 
+/**
+ * @brief Turn the Urbanite system ON. 
+ * 
+ * @param p_this Pointer to an fsm_t struct that contains an `fsm_urbanite_t`. 
+ */
 static void do_start_up_measure(fsm_t *p_this)
 {
     fsm_urbanite_t *urbanite = ((fsm_urbanite_t *)p_this);
@@ -160,6 +158,11 @@ static void do_start_up_measure(fsm_t *p_this)
     printf("[URBANITE][%ld] Urbanite system ON\n", port_system_get_millis());
 }
 
+/**
+ * @brief Turn the Urbanite system OFF. 
+ * 
+ * @param p_this Pointer to an fsm_t struct that contains an `fsm_urbanite_t`.
+ */
 static void do_stop_urbanite(fsm_t *p_this)
 {
     fsm_urbanite_t *urbanite = ((fsm_urbanite_t *)p_this);
@@ -174,6 +177,11 @@ static void do_stop_urbanite(fsm_t *p_this)
     printf("[URBANITE][%ld] Urbanite system OFF\n", port_system_get_millis());
 }
 
+/**
+ * @brief Pause or resume the display system. 
+ * 
+ * @param p_this Pointer to an fsm_t struct that contains an `fsm_urbanite_t`.
+ */
 static void do_pause_display(fsm_t *p_this)
 {
     fsm_urbanite_t *urbanite = ((fsm_urbanite_t *)p_this);
@@ -193,6 +201,11 @@ static void do_pause_display(fsm_t *p_this)
     }
 }
 
+/**
+ * @brief Display the distance measured by the ultrasound sensor. 
+ * 
+ * @param p_this Pointer to an fsm_t struct that contains an `fsm_urbanite_t`.
+ */
 static void do_display_distance(fsm_t *p_this)
 {
     fsm_urbanite_t *urbanite = ((fsm_urbanite_t *)p_this);
@@ -219,26 +232,49 @@ static void do_display_distance(fsm_t *p_this)
     printf("[URBANITE][%ld] Distance: %ld cm\n", port_system_get_millis(), distance_cm);
 }
 
+/**
+ * @brief Start the low power mode while the Urbanite is OFF. 
+ * 
+ * @param p_this Pointer to an fsm_t struct that contains an `fsm_urbanite_t`.
+ */
 static void do_sleep_off(fsm_t *p_this)
 {
     port_system_sleep();
 }
-
+/**
+ * @brief Start the low power mode while the Urbanite is measuring the distance and it is waiting for a new measurement. 
+ * 
+ * @param p_this Pointer to an fsm_t struct that contains an `fsm_urbanite_t`.
+ */
 static void do_sleep_while_measure(fsm_t *p_this)
 {
     port_system_sleep();
 }
 
+/**
+ * @brief Start the low power mode while the Urbanite is awakened by a debug breakpoint or similar in the SLEEP_WHILE_OFF state. 
+ * 
+ * @param p_this Pointer to an fsm_t struct that contains an `fsm_urbanite_t`.
+ */
 static void do_sleep_while_off(fsm_t *p_this)
 {
     port_system_sleep();
 }
 
+/**
+ * @brief Start the low power mode while the Urbanite is awakened by a debug breakpoint or similar in the SLEEP_WHILE_ON state. 
+ * 
+ * @param p_this Pointer to an fsm_t struct that contains an `fsm_urbanite_t`.
+ */
 static void do_sleep_while_on(fsm_t *p_this)
 {
     port_system_sleep();
 }
 
+/**
+ * @brief Array representing the transitions table of the FSM Urbanite. 
+ * 
+ */
 static fsm_trans_t fsm_trans_urbanite[] = {
     {OFF, check_on, MEASURE, do_start_up_measure},
     {OFF, check_no_activity, SLEEP_WHILE_OFF, do_sleep_off},
@@ -253,6 +289,16 @@ static fsm_trans_t fsm_trans_urbanite[] = {
     { -1, NULL, -1, NULL }
 };
 
+/**
+ * @brief Create a new Urbanite FSM.
+ * 
+ * @param p_fsm_urbanite Pointer to the Urbanite FSM. 
+ * @param p_fsm_button Pointer to the button FSM that activates the system and disables the display if it disturbs the driver. 
+ * @param on_off_press_time_ms Button press time in milliseconds to turn the system ON or OFF 
+ * @param pause_display_time_ms Time in milliseconds to pause the display after a short press of the button 
+ * @param p_fsm_ultrasound_rear Pointer to the ultrasound FSM that measures the distance to the rear obstacle. 
+ * @param p_fsm_display_rear Pointer to the display FSM that shows the distance to the rear obstacle.
+ */
 static void fsm_urbanite_init(fsm_urbanite_t *p_fsm_urbanite,
                               fsm_button_t *p_fsm_button,
                               uint32_t on_off_press_time_ms,

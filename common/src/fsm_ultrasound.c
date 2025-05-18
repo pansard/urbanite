@@ -24,35 +24,27 @@
 /**
  * @brief Structure to define the Ultrasound FSM.
  *
- * @var fsm_ultrasound_t::f
- * Button FSM 
- * @var fsm_ultrasound_t::distance_cm
- * Distance measured by the ultrasound sensor in cm.
- * @var fsm_ultrasound_t::status
- * Status of the ultrasound sensor (ON/OFF).
- * @var fsm_ultrasound_t::new_measurement
- * Flag to indicate if a new measurement is ready.
- * @var fsm_ultrasound_t::ultrasound_id
- * ID of the ultrasound sensor.
- * @var fsm_ultrasound_t::distance_arr
- * Array to store the distances measured by the ultrasound sensor.
- * @var fsm_ultrasound_t::distance_idx
- * Index of the distance array.
  */
 struct fsm_ultrasound_t
 {
+    /** @brief Button FSM */
     fsm_t f;
+    /** @brief Distance measured by the ultrasound sensor in cm */
     uint32_t distance_cm;
+    /** @brief Status of the ultrasound sensor (ON/OFF) */
     bool status;
+    /** @brief Flag to indicate if a new measurement is ready */
     bool new_measurement;
+    /** @brief ID of the ultrasound sensor*/
     uint32_t ultrasound_id;
+    /** @brief Array to store the distances measured by the ultrasound sensor */
     uint32_t distance_arr[FSM_ULTRASOUND_NUM_MEASUREMENTS];
+    /** @brief Index of the distance array */
     uint32_t distance_idx;
 };
 
 /* Private functions -----------------------------------------------------------*/
 
-// Comparison function for qsort
 /**
  * @brief Comparison function for qsort.
  * 

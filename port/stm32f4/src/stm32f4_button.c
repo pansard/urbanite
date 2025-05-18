@@ -34,13 +34,18 @@ typedef struct
 } stm32f4_button_hw_t;
 
 /* Global variables ------------------------------------------------------------*/
+/**
+ * @brief Array of elements that represents the HW characteristics of the buttons connected to the STM32F4 platform. 
+ * 
+ */
 static stm32f4_button_hw_t buttons_arr[] = {
     [PORT_PARKING_BUTTON_ID] = {
         .p_port = STM32F4_PARKING_BUTTON_GPIO, 
         .pin = STM32F4_PARKING_BUTTON_PIN, 
         .pupd_mode = STM32F4_GPIO_PUPDR_NOPULL
     }
-}; //DOCUMENTAR DOXYGEN
+};
+
 /* Private functions ----------------------------------------------------------*/
 /**
  * @brief Get the button status struct with the given ID.

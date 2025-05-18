@@ -1,8 +1,8 @@
 /**
  * @file port_display.h
  * @brief Header for the portable functions to interact with the HW of the display system. The functions must be implemented in the platform-specific code.
- * @author alumno1
- * @author alumno2
+ * @author Lucía Petit
+ * @author Mateo Pansard
  * @date fecha
  */
 #ifndef PORT_DISPLAY_SYSTEM_H_
@@ -42,7 +42,7 @@ typedef struct {
 void port_display_init(uint32_t display_id);
 
 /**
- * @briefSet the Capture/Compare register values for each channel of the RGB LED given a color.
+ * @brief Set the Capture/Compare register values for each channel of the RGB LED given a color.
  * 
  * This function disables the timer associated to the RGB LEDs, sets the Capture/Compare register values for each channel of the RGB LED, and enables the timer.
  * @param display_id Display system identifier number.

@@ -18,6 +18,10 @@
 #include "fsm.h"
 
 /* Defines and enums ----------------------------------------------------------*/
+/**
+ * @brief Number of measurements to store in the array 
+ * 
+ */
 #define FSM_ULTRASOUND_NUM_MEASUREMENTS 5
 
 /**

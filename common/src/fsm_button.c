@@ -20,33 +20,18 @@
 /**
  * @brief Structure of the Button FSM.
 */
-/** 
- * @var fsm_button_t::f
- * Button FSM
- * @var fsm_button_t::debounce_time_ms
- * Debounce time in ms.
- * @var fsm_button_t::next_timeout
- * Next timeout for the FSM.
- * @var fsm_button_t::tick_pressed
- * Tick when the button was pressed.
- * @var fsm_button_t::duration
- * Duration of the button pressed.
- * @var fsm_button_t::button_id
- * Button ID.
- * 
- */
 struct fsm_button_t {
-    /** @brief //Base struct for FSMs */
+    /** @brief Base struct for FSMs */
     fsm_t f; 
-    /** @brief //Debounce time in ms */
+    /** @brief Debounce time in ms */
     uint32_t debounce_time_ms; 
-    /** @brief //Next timeout for the FSM */
+    /** @brief Next timeout for the FSM */
     uint32_t next_timeout; 
-    /** @brief //Tick when the button was pressed  */
+    /** @brief Tick when the button was pressed  */
     uint32_t tick_pressed;
-    /** @brief //Duration of the button pressed */
+    /** @brief Duration of the button pressed */
     uint32_t duration; 
-    /** @brief //Button ID */
+    /** @brief Button ID */
     uint32_t button_id; 
 };
 

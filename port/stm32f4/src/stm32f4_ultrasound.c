@@ -39,7 +39,7 @@ typedef struct
     bool trigger_end;
     /** @brief Flag to indicate that the echo signal has been received */
     bool echo_received;
-    /** @briefTick time when the echo signal was received */
+    /** @brief Tick time when the echo signal was received */
     uint32_t echo_init_tick;
     /** @brief Tick time when the echo signal ended */
     uint32_t echo_end_tick;
