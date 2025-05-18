@@ -1,3 +1,11 @@
+/**
+ * @file stm32f4_ultrasound.c
+ * @brief Portable functions to interact with the ultrasound FSM library. All portable functions must be implemented in this file.
+ * @author Lucia Petit
+ * @author Mateo Pansard
+ * @date 2025-05-18
+ */
+
 #ifndef FSM_URBANITE_H_
 #define FSM_URBANITE_H_
 

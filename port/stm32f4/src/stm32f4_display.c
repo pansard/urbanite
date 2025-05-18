@@ -21,25 +21,33 @@
 /* Defines --------------------------------------------------------------------*/
 
 /* Typedefs --------------------------------------------------------------------*/
+/** @brief Structure to define the HW dependencies of a display */
 typedef struct
 {
-    GPIO_TypeDef *p_port_red;
-    uint8_t pin_red;
-    GPIO_TypeDef *p_port_green;
-    uint8_t pin_green;
-    GPIO_TypeDef *p_port_blue;
-    uint8_t pin_blue;
+    /** @brief //GPIO where the RED LED is connected*/
+    GPIO_TypeDef *p_port_red;  
+    /** @brief //Pin where the RED LED is connected*/
+    uint8_t pin_red;         
+    /** @brief //GPIO where the GREEN LED is connected*/
+    GPIO_TypeDef *p_port_green; 
+    /** @brief //Pin where the GREEN LED is connected*/
+    uint8_t pin_green;      
+    /** @brief //GPIO where the BLUE LED is connected*/
+    GPIO_TypeDef *p_port_blue; 
+    /** @brief //Pin where the BLUE LED is connected*/
+    uint8_t pin_blue;       
 } stm32f4_display_hw_t;
 
 /* Global variables */
+/** @brief Array of elements that represents the HW characteristics of the RGB LED of the display systems connected to the STM32F4 platform */
 static stm32f4_display_hw_t displays_arr[] = {
     [PORT_REAR_PARKING_DISPLAY_ID] = {
-        .p_port_red = STM32F4_REAR_PARKING_DISPLAY_RGB_R_GPIO,
+        .p_port_red = STM32F4_REAR_PARKING_DISPLAY_RGB_R_GPIO, 
         .pin_red = STM32F4_REAR_PARKING_DISPLAY_RGB_R_PIN,
         .p_port_green = STM32F4_REAR_PARKING_DISPLAY_RGB_G_GPIO,
         .pin_green = STM32F4_REAR_PARKING_DISPLAY_RGB_G_PIN,
         .p_port_blue = STM32F4_REAR_PARKING_DISPLAY_RGB_B_GPIO,
-        .pin_blue = STM32F4_REAR_PARKING_DISPLAY_RGB_B_PIN}};
+        .pin_blue = STM32F4_REAR_PARKING_DISPLAY_RGB_B_PIN}};  
 
 /* Private functions -----------------------------------------------------------*/
 stm32f4_display_hw_t *_stm32f4_display_get(uint32_t display_id)

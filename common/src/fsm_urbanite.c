@@ -1,3 +1,11 @@
+/**
+ * @file fsm_urbanite.c
+ * @brief Urbanite FSM main file.
+ * @author Lucía Petit
+ * @author Mateo Pansard
+ * @date 18/05/2025
+ */
+
 #include <stdlib.h>
 #include <stdio.h>
 #include "port_system.h"
@@ -17,13 +25,20 @@
  */
 struct fsm_urbanite_t
 {
-    fsm_t f;
-    fsm_button_t *p_fsm_button;
-    uint32_t on_off_press_time_ms;
-    uint32_t pause_display_time_ms;
-    bool is_paused;
-    fsm_ultrasound_t *p_fsm_ultrasound_rear;
-    fsm_display_t *p_fsm_display_rear;
+    /** @brief //Base struct for FSMs */
+    fsm_t f; 
+    /** @brief //Pointer to the button FSM */
+    fsm_button_t *p_fsm_button; 
+    /** @brief //Time in milliseconds for the button press to turn on/off the system */
+    uint32_t on_off_press_time_ms; 
+    /** @brief //Time in milliseconds for the button press to pause/resume the display */
+    uint32_t pause_display_time_ms; 
+    /** @brief //Flag to indicate if the display is paused */
+    bool is_paused; 
+    /** @brief //Pointer to the ultrasound FSM */
+    fsm_ultrasound_t *p_fsm_ultrasound_rear;  
+    /** @brief //Pointer to the display FSM */
+    fsm_display_t *p_fsm_display_rear; 
 };
 
 /* STATE MACHINE INPUT FUNCTIONS */

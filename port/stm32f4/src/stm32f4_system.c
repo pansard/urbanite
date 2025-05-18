@@ -188,11 +188,19 @@ void port_system_set_millis(uint32_t ms)
   msTicks = ms;
 }
 
+/**
+ * @brief Suspend the SysTick timer.
+ * 
+ */
 void port_system_systick_suspend()
 {
  SysTick->CTRL &= ~SysTick_CTRL_TICKINT_Msk;
 }
 
+/**
+ * @brief Resume the SysTick timer.
+ * 
+ */
 void port_system_systick_resume()
 {
   SysTick->CTRL |= SysTick_CTRL_TICKINT_Msk;
@@ -327,6 +335,8 @@ void stm32f4_system_gpio_toggle(GPIO_TypeDef * p_port, uint8_t pin) {
   //stm32f4_system_gpio_write(p_port, pin, !stm32f4_system_gpio_read(p_port, pin));
 } 
 
+
+
 void 	stm32f4_system_gpio_write(GPIO_TypeDef *p_port, uint8_t pin, bool value) {
   if (value) {
     p_port->BSRR |= BIT_POS_TO_MASK(pin);
@@ -335,6 +345,9 @@ void 	stm32f4_system_gpio_write(GPIO_TypeDef *p_port, uint8_t pin, bool value) {
   }
 } 
 
+/**
+  * @brief  Set the system in stop mode for low power consumption
+*/
 void port_system_power_stop()
 {
  MODIFY_REG(PWR->CR, (PWR_CR_PDDS | PWR_CR_LPDS), PWR_CR_LPDS);   // Select the regulator state in Stop mode: Set PDDS and LPDS bits according to PWR_Regulator value
@@ -343,6 +356,9 @@ void port_system_power_stop()
  SCB->SCR &= ~((uint32_t)SCB_SCR_SLEEPDEEP_Msk); // Reset SLEEPDEEP bit of Cortex System Control Register
 }
 
+/**
+  * @brief  Set the system in sleep mode for low power consumption
+*/
 void port_system_power_sleep()
 {
  MODIFY_REG(PWR->CR, (PWR_CR_PDDS | PWR_CR_LPDS), PWR_CR_LPDS);   // Select the regulator state in Stop mode: Set PDDS and LPDS bits according to PWR_Regulator value
@@ -350,7 +366,10 @@ void port_system_power_sleep()
  __WFI(); // Select Sleep mode entry : Request Wait For Interrupt
 }
 
-void port_system_sleep (void) {
+/** 
+  * @brief  Set the system in stop mode for low power consumption.
+  */
+  void port_system_sleep (void) {
   port_system_systick_suspend(); // Suspend SysTick interrupt
   port_system_power_sleep(); // Enter Sleep mode
 }

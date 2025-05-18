@@ -36,12 +36,18 @@
  * 
  */
 struct fsm_button_t {
-    fsm_t f; /* Base struct for FSMs */
-    uint32_t debounce_time_ms; /* Debounce time in ms */
-    uint32_t next_timeout; /* Next timeout for the FSM */
-    uint32_t tick_pressed; /* Tick when the button was pressed */
-    uint32_t duration; /* Duration of the button pressed */
-    uint32_t button_id; /* Button ID */
+    /** @brief //Base struct for FSMs */
+    fsm_t f; 
+    /** @brief //Debounce time in ms */
+    uint32_t debounce_time_ms; 
+    /** @brief //Next timeout for the FSM */
+    uint32_t next_timeout; 
+    /** @brief //Tick when the button was pressed  */
+    uint32_t tick_pressed;
+    /** @brief //Duration of the button pressed */
+    uint32_t duration; 
+    /** @brief //Button ID */
+    uint32_t button_id; 
 };
 
 /* State machine input or transition functions */

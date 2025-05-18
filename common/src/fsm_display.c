@@ -18,13 +18,29 @@
 #include "fsm.h"
 #include "fsm_display.h"
 /* Typedefs --------------------------------------------------------------------*/
+/**
+ * @brief Structure of the display FSM.
+ *
+ * @var fsm_display_t::f
+ * Display FSM 
+ * @var fsm_display_t::distance_cm
+ * Distance measured by the ultrasound sensor in cm.
+ * @var fsm_display_t::new_color
+ * Flag to indicate if a new color is ready.
+ * @var fsm_display_t::status
+ * Status of the display (ON/OFF).
+ * @var fsm_display_t::idle
+ * Flag to indicate if the display is idle.
+ * @var fsm_display_t::display_id
+ * ID of the display.
+ */
 struct  fsm_display_t{
-    fsm_t f; /* Base struct for FSMs */
-    int32_t distance_cm; /* Distance in cm */
-    bool new_color; /* New color flag */
-    bool status; /* Status of the display */
-    bool idle; /* Idle flag */
-    uint32_t display_id; /* Display ID */
+    fsm_t f; 
+    int32_t distance_cm; 
+    bool new_color; 
+    bool status; 
+    bool idle; 
+    uint32_t display_id; 
 };
 /* Private functions -----------------------------------------------------------*/
 void _compute_display_levels (rgb_color_t *p_color, int32_t distance_cm){

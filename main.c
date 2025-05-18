@@ -23,8 +23,8 @@
 #include "fsm_urbanite.h"
 
 /* Defines ------------------------------------------------------------------*/
-#define URBANITE_ON_OFF_PRESS_TIME_MS 1000
-#define URBANITE_PAUSE_DISPLAY_TIME_MS 500
+#define URBANITE_ON_OFF_PRESS_TIME_MS 1000 /*!< Time in ms to press the button to turn on/off the system */
+#define URBANITE_PAUSE_DISPLAY_TIME_MS 500 /*!< Time in ms to pause the display system */
 
 /** 
  * @brief  The application entry point.
