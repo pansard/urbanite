@@ -1,9 +1,9 @@
 /**
  * @file stm32f4_display.c
  * @brief Portable functions to interact with the display system FSM library. All portable functions must be implemented in this file.
- * @author alumno1
- * @author alumno2
- * @date fecha
+ * @author Lucia Petit
+ * @author Mateo Pansard
+ * @date 2025-05-18
  */
 
 /* Standard C includes */

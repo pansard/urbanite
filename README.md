@@ -104,74 +104,48 @@ This is the FSM of the button: ![FSM del ultrasonic](docs/assets/imgs/fsm_ultras
 
 ## Version 3
 
-Breve descripción de la versión 3.
+In Version 3, the system adds the display, which is an RGB LED. The RGB LED is connected to the pins PB6 (red), PB8 (green), and PB9 (blue). The code uses the TIM4 timer to control the frequency of the **PWM** signal for each color. The RGB LED will show the distance to the object detected. The characteristics of the display are shown in the table below.
+
+| Parameter| 	Value| 
+| --------- | --------- | 
+| Pin LED red	| PB6| 
+| Pin LED green| PB8| 
+| Pin LED blue| 	PB9| 
+| Mode| Alternative| 
+| Pull up/ down	| No pull| 
+| Timer| TIM4|
+| Channel LED red| 	Channel 1| 
+|Channel LED green| Channel 3| 
+| Channel LED blue	| Channel 4 | 
+| PWM mode| PWM mode 1|
+|Prescaler | 4 | 
+| Period| 3.9ms | 
+| Duty cycle LED red|(variable, depends on the color to show) | 
+| Duty cycle LED green| (variable, depends on the color to show)| 
+| Duty cycle LED blue|(variable, depends on the color to show) |
+
+Para los distintos colores el ciclo de trabajo de los LED será:
+
+|Distance|Color|LED red| LED green| LED blue|
+| --------- | --------- | --------- | --------- | --------- |
+|0-25$ cm|Red (danger)|100%| 0%| 0%|
+|25-50 cm|Yellow (warning)|37%| 37%|0%|
+|50-150 cm|Green (no~problem)|0%| 100%| 0%|
+|150-175 cm|Turquoise (info)|10%| 35%| 32%|
+|175-200 cm|Blue (OK)|0%| 0%| 100%|
+|Other distances|Off (inactive)|0%| 0%| 0%|
+
+This is the FSM of the display: ![FSM del display](docs/assets/imgs/fsm_display.png)
+
 
 ## Version 4
 
-Breve descripción de la versión 4.
+In Version 4 the system completes its FSM to interact with the user button, the ultrasonic transceiver, and the display. The system will show the distance to the object detected in the display.
+
+This is the FSM of the system: ![FSM del urbanite](docs/assets/imgs/fsm_urbanite.png)
+
+Situando un objeto a 12 cm del sensor, esta es la lectura vista desde el osciloscopio : ![Captura del osciloscopio](docs/assets/imgs/osciloscopio.png)
 
 ## Version 5
 
 Breve descripción de la versión 5.
-
-* Para poner un texto en negrita se usa el símbolo `**` de manera consecutiva. Por ejemplo: **Texto en negrita**
-* Para poner un texto en cursiva se usa el símbolo `*` de manera consecutiva. Por ejemplo: *Texto en cursiva*
-* Para poner un texto en cursiva y negrita se usa el símbolo `***` de manera consecutiva. Por ejemplo: ***Texto en cursiva y negrita***
-
-Para añadir subsecciones se usa el símbolo `#` de manera consecutiva. Por ejemplo:
-
-### Subsección 1
-
-Breve descripción de la subsección 1.
-
-Para añadir una lista de elementos se usa el símbolo `-` de manera consecutiva. Por ejemplo:
-
-* Elemento 1
-* Elemento 2
-* Elemento 3
-
-Para añadir una lista de elementos numerados se usa el símbolo `1.` de manera consecutiva. Por ejemplo:
-
-1. Elemento 1
-2. Elemento 2
-3. Elemento 3
-
-Para añadir un enlace a una página web se usa el siguiente código:
-
-```markdown
-Enlace a [Google](https://www.google.com).
-```
-
-NOTA: **NO** añada el código ```markdown``` sino lo de dentro. Este código es un para mostrar de forma literal cómo se puede añadir un enlace a una página web al fichero `README.md`.
-
-Puede añadir tablas de la siguiente manera:
-
-| Columna 1 | Columna 2 | Columna 3 |
-| --------- | --------- | --------- |
-| Valor 1   | Valor 2   | Valor 3   |
-| Valor 4   | Valor 5   | Valor 6   |
-
-Para añadir un enlace a un fichero `.c` o `.h` puede usar el siguiente código. Se trata de enlaces a ficheros `.html` que se generan automáticamente con la documentación del código al ejecutar Doxygen y que se encuentran en la carpeta `docs/html/`.
-
-```markdown
-Enlace a la [FSM de Version 1](fsm__button_8c.html).
-```
-
-
-Puede añadir una imagen de portada **de su propiedad** aquí. Por ejemplo, del montaje final, o una captura de osciloscopio, etc.
-
-**Las imágenes se deben guardar en la carpeta `docs/assets/imgs/` y se pueden incluir en el documento de la siguiente manera:**
-
-```markdown
-![Texto alternativo](docs/assets/imgs/imagen.png)
-```
-
-NOTA: **NO** añada el código ```markdown``` en el fichero `README.md` de su proyecto, sino lo de dentro. Este código es un para mostrar de forma literal cómo se puede añadir una imagen al fichero `README.md`.
-
-**Añada un enlace a un vídeo público de su propiedad aquí con la demostración del proyecto explicando lo que haya hecho en la versión V5.**
-
-
-NOTA: **NO** añada el código ```markdown``` sino lo de dentro. Este código es un para mostrar de forma literal cómo se puede añadir un enlace a un fichero `.c` o `.h` al fichero `README.md`.
-
-
-
