@@ -1,9 +1,9 @@
 /**
  * @file fsm_display.c
  * @brief Display system FSM main file.
- * @author alumno1
- * @author alumno2
- * @date fecha
+ * @author Lucia Petit
+ * @author Mateo Pansard
+ * @date 2025-05-19
  */
 
 /* Includes ------------------------------------------------------------------*/
@@ -37,8 +37,15 @@ struct  fsm_display_t {
     /** @brief ID of the display */
     uint32_t display_id; 
 };
-/* Private functions -----------------------------------------------------------*/
 
+/* Private functions -----------------------------------------------------------*/
+static rgb_color_t changing_color(rgb_color_t color1, rgb_color_t color2, float f) {
+    rgb_color_t result;
+    result.r = (uint8_t)((1.0f - f) * color1.r + f * color2.r);
+    result.g = (uint8_t)((1.0f -f) * color1.g + f * color2.g);
+    result.b = (uint8_t)((1.0f - f) * color1.b + f * color2.b);
+    return result;
+}
 /**
  * @brief Set color levels of the RGB LEDs according to the distance.
  * 
@@ -47,7 +54,9 @@ struct  fsm_display_t {
  * @param p_color Pointer to an rgb_color_t struct that will store the levels of the RGB LED.
  * @param distance_cm Distance measured by the ultrasound sensor in centimeters. 
  */
-void _compute_display_levels (rgb_color_t *p_color, int32_t distance_cm){
+
+ /*
+static void _compute_display_levels (rgb_color_t *p_color, int32_t distance_cm){
     if (distance_cm <=  WARNING_MIN_CM && distance_cm >= DANGER_MIN_CM){
         *p_color = COLOR_RED;
     } else if (distance_cm <= NO_PROBLEM_MIN_CM && distance_cm > WARNING_MIN_CM){
@@ -60,7 +69,38 @@ void _compute_display_levels (rgb_color_t *p_color, int32_t distance_cm){
         *p_color = COLOR_BLUE;
     } else 
         *p_color = COLOR_OFF;
-} 
+} */
+
+static void _compute_display_levels(rgb_color_t *p_color, int32_t distance_cm) {
+    if (distance_cm <= WARNING_MIN_CM && distance_cm >= DANGER_MIN_CM) {
+        // Rojo -> Amarillo
+        float t = (float)(distance_cm - DANGER_MIN_CM) / (WARNING_MIN_CM - DANGER_MIN_CM);
+        *p_color = changing_color(COLOR_RED, COLOR_YELLOW, t);
+    }
+    else if (distance_cm <= NO_PROBLEM_MIN_CM) {
+        // Amarillo -> Verde
+        float t = (float)(distance_cm - WARNING_MIN_CM) / (NO_PROBLEM_MIN_CM - WARNING_MIN_CM);
+        *p_color = changing_color(COLOR_YELLOW, COLOR_GREEN, t);
+    }
+    else if (distance_cm <= INFO_MIN_CM) {
+        // Verde -> Turquesa
+        float t = (float)(distance_cm - NO_PROBLEM_MIN_CM) / (INFO_MIN_CM - NO_PROBLEM_MIN_CM);
+        *p_color = changing_color(COLOR_GREEN, COLOR_TURQUOISE, t);
+    }
+    else if (distance_cm <= OK_MIN_CM) {
+        // Turquesa -> Azul
+        float t = (float)(distance_cm - INFO_MIN_CM) / (OK_MIN_CM - INFO_MIN_CM);
+        *p_color = changing_color(COLOR_TURQUOISE, COLOR_BLUE, t);
+    }
+    else if (distance_cm <= OK_MAX_CM) {
+        // Azul fijo
+        *p_color = COLOR_BLUE;
+    }
+    else {
+        // Fuera de rango
+        *p_color = COLOR_OFF;
+    }
+}
 
 /* State machine input or transition functions */
 

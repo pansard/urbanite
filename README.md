@@ -5,18 +5,6 @@
 * **Mateo Pansard** - email: [mateo.pansard@alumnos.upm.es](mailto:mateo.pansard@alumnos.upm.es)
 * **Lucia Petit** - email: [lucia.petit@alumnos.upm.es](mailto:lucia.petit@alumnos.upm.es)
 
-Nuestro sistema base simula el sensor de aparcamiento trasero de un coche. Al presionar el **botón azul**, se activa el sistema como si el coche pusiera la **marcha atrás**. En ese momento, el sistema central envía un pulso al **sensor ultrasónico HC-SR04** para medir la distancia hasta un obstáculo.
-
-El resultado se muestra en el **LED RGB de la placa Nucleo-STM32**, que cambia de color según la proximidad. Para evitar distracciones, el usuario puede **pausar/reanudar la iluminación** con una pulsación corta del botón, excepto en caso de colisión inminente.
-
-El sistema tiene cuatro módulos principales:
-
-    1. Sistema central: Placa Nucleo-STM32 con el microcontrolador STM32F446RE, que gestiona el encendido y la medición.
-    2. Control básico: Incluye el botón de usuario y un LED para indicar acciones.
-    3. Medición de distancia: Sensor HC-SR04 que emite y recibe ondas ultrasónicas.
-    4. Módulo de actuación: LED RGB que indica la distancia al obstáculo.
-
-Para apagar el sistema, se mantiene pulsado el botón durante un tiempo largo. Se muestra un **log en modo depuración**, y hay un video demostrativo disponible.
 
 Our base system simulates a **rear parking sensor** in a car. When the blue button is pressed, the system activates as if the car were shifting into **reverse gear**. At that moment, the central system sends a pulse to the **HC-SR04 ultrasonic sensor** to measure the distance to an obstacle.
 
@@ -148,4 +136,19 @@ Situando un objeto a 12 cm del sensor, esta es la lectura vista desde el oscilos
 
 ## Version 5
 
-Breve descripción de la versión 5.
+We decided to create an LED indicator to display the different Urbanite statuses.
+
+We programmed **LED2 on the Nucleo-STM32 board** to turn off when the board is off and turn on when it is measuring a distance or paused.
+
+| Parameter| 	Value| 
+| --------- | --------- | 
+| Pin LED2 | PA5 |
+| Pull up/ down	| No pull| 
+
+Below is a video of the V5 in operation.
+
+[Video de la V5](docs/assets/imgs/V5.mp4)
+
+The functionality of our V5 (as seen in the attached video) is as follows:
+
+We have programmed the LD2 LED on our board to turn on at the same time as the Urbanite system. The Urbanite starts **off**, as does the LED. When the board is turned **on**, LED2 lights up, the ultrasound begins measuring distances and the display begins to operate. When **paused**, LED2 remains lit and the Urbanite enters low-power mode, turning on the display only at close ranges. Finally, when the board is turned **off**, LED2 also turns off.
