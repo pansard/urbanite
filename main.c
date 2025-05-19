@@ -16,6 +16,7 @@
 #include "port_button.h"
 #include "port_ultrasound.h"
 #include "port_display.h"
+#include "port_led.h"
 #include "fsm.h"
 #include "fsm_button.h"
 #include "fsm_ultrasound.h"
@@ -34,6 +35,8 @@ int main(void)
 {
     /* Init board */
     port_system_init();
+    port_led_gpio_setup();
+    port_led_on();
 
     /* Create state machines */
     fsm_button_t* p_fsm_button = fsm_button_new(PORT_PARKING_BUTTON_DEBOUNCE_TIME_MS, PORT_PARKING_BUTTON_ID);

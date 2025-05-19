@@ -11,6 +11,7 @@
 #include "port_system.h"
 #include "fsm.h"
 #include "fsm_urbanite.h"
+#include "port_led.h"
 
 /**
  * @brief Structure of the Urbanite FSM.
@@ -152,6 +153,7 @@ static void do_start_up_measure(fsm_t *p_this)
     fsm_ultrasound_t *ultrasound = urbanite->p_fsm_ultrasound_rear;
     fsm_display_t *display = urbanite->p_fsm_display_rear;
 
+    port_led_on();
     fsm_button_reset_duration(button);
     fsm_ultrasound_start(ultrasound);
     fsm_display_set_status(display, true);
@@ -170,6 +172,7 @@ static void do_stop_urbanite(fsm_t *p_this)
     fsm_ultrasound_t *ultrasound = urbanite->p_fsm_ultrasound_rear;
     fsm_display_t *display = urbanite->p_fsm_display_rear;
 
+    port_led_off();
     fsm_button_reset_duration(button);
     fsm_ultrasound_stop(ultrasound);
     fsm_display_set_status(display, false);
@@ -191,6 +194,7 @@ static void do_pause_display(fsm_t *p_this)
     fsm_button_reset_duration(button);
     urbanite->is_paused = !(urbanite->is_paused);
     fsm_display_set_status(display, !urbanite->is_paused);
+    
     if (urbanite->is_paused)
     {
         printf("[URBANITE][%ld] Urbanite system display PAUSE\n", port_system_get_millis());
@@ -239,6 +243,7 @@ static void do_display_distance(fsm_t *p_this)
  */
 static void do_sleep_off(fsm_t *p_this)
 {
+    port_led_off();
     port_system_sleep();
 }
 /**
@@ -277,7 +282,7 @@ static void do_sleep_while_on(fsm_t *p_this)
  */
 static fsm_trans_t fsm_trans_urbanite[] = {
     {OFF, check_on, MEASURE, do_start_up_measure},
-    {OFF, check_no_activity, SLEEP_WHILE_OFF, do_sleep_off},
+    {OFF, check_no_activity, SLEEP_WHILE_OFF, do_sleep_off}, 
     {MEASURE, check_off, OFF, do_stop_urbanite},
     {MEASURE, check_new_measure, MEASURE, do_display_distance},
     {MEASURE, check_pause_display, MEASURE, do_pause_display},
@@ -285,7 +290,7 @@ static fsm_trans_t fsm_trans_urbanite[] = {
     {SLEEP_WHILE_ON, check_activity_in_measure, MEASURE, NULL},
     {SLEEP_WHILE_ON, check_no_activity, SLEEP_WHILE_ON, do_sleep_while_on},
     {SLEEP_WHILE_OFF, check_activity, OFF, NULL},
-    {SLEEP_WHILE_OFF, check_no_activity, SLEEP_WHILE_OFF, do_sleep_while_off},
+    {SLEEP_WHILE_OFF, check_no_activity, SLEEP_WHILE_OFF, do_sleep_while_off}, 
     { -1, NULL, -1, NULL }
 };
 
@@ -306,6 +311,7 @@ static void fsm_urbanite_init(fsm_urbanite_t *p_fsm_urbanite,
                               fsm_ultrasound_t *p_fsm_ultrasound_rear,
                               fsm_display_t *p_fsm_display_rear)
 {
+    //encender el led
     fsm_init(&p_fsm_urbanite->f, fsm_trans_urbanite);
     p_fsm_urbanite->p_fsm_button = p_fsm_button;
     p_fsm_urbanite->on_off_press_time_ms = on_off_press_time_ms;
