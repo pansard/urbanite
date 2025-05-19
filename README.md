@@ -147,7 +147,7 @@ We programmed **LED2 on the Nucleo-STM32 board** to turn off when the board is o
 
 Below is a video of the V5 in operation.
 
-[Video de la V5](docs/assets/imgs/V5.mp4)
+[Video de la V5]
 
 The functionality of our V5 (as seen in the attached video) is as follows:
 
