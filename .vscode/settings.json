@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "fsm_display.h": "c",
+        "stdint.h": "c"
+    }
+}
