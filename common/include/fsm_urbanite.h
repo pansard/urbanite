@@ -1,9 +1,9 @@
 /**
- * @file stm32f4_ultrasound.c
- * @brief Portable functions to interact with the ultrasound FSM library. All portable functions must be implemented in this file.
+ * @file fsm_urbanite.h
+ * @brief Header for fsm_urbanite.c file.
  * @author Lucia Petit
  * @author Mateo Pansard
- * @date 2025-05-18
+ * @date 2025-05-20
  */
 
 #ifndef FSM_URBANITE_H_

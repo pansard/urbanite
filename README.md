@@ -147,8 +147,18 @@ We programmed **LED2 on the Nucleo-STM32 board** to turn off when the board is o
 
 Below is a video of the V5 in operation.
 
-[Video de la V5]
+[Video V5_LED2](https://drive.google.com/file/d/1Gw60Ea3yhj-e3-r_TgNfe3GeZgtP1LAi/view?usp=sharing)
 
 The functionality of our V5 (as seen in the attached video) is as follows:
 
 We have programmed the LD2 LED on our board to turn on at the same time as the Urbanite system. The Urbanite starts **off**, as does the LED. When the board is turned **on**, LED2 lights up, the ultrasound begins measuring distances and the display begins to operate. When **paused**, LED2 remains lit and the Urbanite enters low-power mode, turning on the display only at close ranges. Finally, when the board is turned **off**, LED2 also turns off.
+
+
+In addition to implementing the LED that indicates the machine's state, we also programmed **the RGB display LED to change its color smoothly and continuously** based on distance. Instead of using discrete color levels, we applied a **linear interpolation** function to create gradual transitions between colors, improving visual feedback.
+
+[Video V5_linear_display](https://drive.google.com/file/d/1efp_D78weGc5cmvBDT0MRK9vkbCbTtG4/view?usp=sharing)
+
+We apologize for the low quality of the video recording. However, it still allows us to demonstrate the intended behavior of the RGB LED.
+As the measured distance increases, the LED color does not switch abruptly between fixed values. Instead, it **transitions smoothly** through intermediate shades, thanks to the use of linear interpolation.
+For example, when the object is close, the LED shows red. As the distance increases, the color gradually shifts toward yellow (a mix of red and green), and eventually becomes fully green.
+This continuous color change provides a more intuitive and visually pleasing representation of the distance, compared to using fixed, discrete color levels.

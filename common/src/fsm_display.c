@@ -42,10 +42,13 @@ struct  fsm_display_t {
 /**
  * @brief Linear change of color
  * 
- * @param color1 
- * @param color2 
- * @param f 
- * @return rgb_color_t 
+ * @param color1  The starting color (when factor f = 0.0).
+ * @param color2  The ending color (when factor f = 1.0).
+ * @param f Interpolation factor between 0.0 and 1.0. 
+ *          - If f = 0.0, the result is color1.
+ *          - If f = 1.0, the result is color2.
+ *          - Intermediate values produce a blended color.
+ * @return rgb_color_t The resulting interpolated color.
  */
 static rgb_color_t changing_color(rgb_color_t color1, rgb_color_t color2, float f) {
     rgb_color_t result;
